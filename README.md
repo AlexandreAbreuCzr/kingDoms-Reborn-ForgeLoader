@@ -6,12 +6,18 @@ Uma base comunitária para retratos personalizados e, futuramente, mods em Lua/C
 
 | Quero… | Download | Como usar |
 | --- | --- | --- |
-| **Jogar com os retratos** | [ForgeLoader para jogadores](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.1.0-alpha/ForgeLoader-Players-0.1.0-alpha.zip) | Extraia, abra `Instalar-ForgeLoader.cmd` e escolha a pasta do jogo. |
-| **Criar e estudar mods** | [ForgeLoader Dev Kit](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.1.0-alpha/ForgeLoader-DevKit-0.1.0-alpha.zip) | Extraia e abra `Abrir-DevKit.cmd`. Requer Python 3.10+ para desenvolvimento. |
+| **Jogar com os retratos** | [ForgeLoader para jogadores](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.1.1-alpha/ForgeLoader-Players-0.1.1-alpha.zip) | Extraia, abra `Instalar-ForgeLoader.cmd` e escolha a pasta do jogo. |
+| **Criar e estudar mods** | [ForgeLoader Dev Kit](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.1.1-alpha/ForgeLoader-DevKit-0.1.1-alpha.zip) | Extraia e abra `Abrir-DevKit.cmd`. Requer Python 3.10+ para desenvolvimento. |
 
 [Todos os arquivos e versões](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases) · [Guia para jogadores](docs/PLAYERS.md) · [Guia do Dev Kit](docs/DEVELOPMENT.md)
 
 O download para jogadores aplica o runtime à sua cópia existente do jogo, com backup. Não inclui o jogo completo e não exige Dev Kit, Python ou compilador. Os arquivos de conferência SHA-256 ficam junto aos downloads na Release.
+
+## Criar mods com IA
+
+O Dev Kit inclui `AGENTS.md`, a skill **forgeloader-modding** e um prompt pronto. Abra a pasta no seu assistente de programação e peça: `Use $forgeloader-modding para criar um mod que...`. A opção **4 — Criar mod com IA** do menu mostra o guia. [Como usar com Codex ou outra IA](CRIAR-MOD-COM-IA.md).
+
+A skill orienta o desenvolvimento; o carregador geral e a API dentro do jogo continuam em construção. Esta atualização não altera o runtime de retratos instalado.
 
 ## O que já funciona
 

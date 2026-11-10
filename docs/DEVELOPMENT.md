@@ -8,6 +8,12 @@ Extraia o ZIP **ForgeLoader-DevKit**. Instale Python 3.10+ no ambiente de desenv
 
 O pacote para jogadores é outro download; ele não exige Python. O gerador não instala mods no jogo nem executa scripts Lua.
 
+## Criar com uma IA
+
+Use a opção **4 — Criar mod com IA** no menu ou abra [CRIAR-MOD-COM-IA.md](../CRIAR-MOD-COM-IA.md). O Dev Kit inclui `AGENTS.md` e a skill `forgeloader-modding` em `.agents/skills/`. Ela orienta criação, validação e integrações Lua/C++, com atenção ao que já existe no runtime. No Codex, abra a pasta do kit e peça `Use $forgeloader-modding para criar...`. Para outras IAs, forneça o guia, a skill completa e os arquivos necessários.
+
+Não há modelo de IA embutido ou chave de API solicitada pelo kit. O assistente escolhido precisa ter acesso aos seus arquivos.
+
 ## Exemplos
 
 - `modkit/examples/lua/kr_hello`: estrutura mínima de um script.
@@ -47,7 +53,7 @@ python scripts/build_releases.py --devkit-only
 python scripts/build_releases.py --runtime-dll CAMINHO/KingdomsPortraits.dll
 ```
 
-Os pacotes ficam em `dist/releases/v0.1.0-alpha`, acompanhados de `SHA256SUMS.txt` e `release-manifest.json`. A DLL precisa corresponder ao hash validado em `profiles/player-patch.json`.
+Os pacotes ficam em `dist/releases/v0.1.1-alpha`, acompanhados de `SHA256SUMS.txt` e `release-manifest.json`. A DLL precisa corresponder ao hash validado em `profiles/player-patch.json`.
 
 O pacote de jogadores contém um patch pequeno de cabeçalhos PE e a DLL própria do projeto. O EXE original é fornecido pelo usuário e transformado localmente. Para gerar novamente o patch a partir das cópias originais exatas:
 

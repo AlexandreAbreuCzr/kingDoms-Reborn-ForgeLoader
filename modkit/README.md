@@ -1,6 +1,8 @@
-# ForgeLoader Dev Kit — fundação 0.1.0-alpha
+# ForgeLoader Dev Kit — fundação 0.1.1-alpha
 
 Objetivo: uma plataforma comunitária para criar e compartilhar mods de Kingdoms Reborn, com API Lua/C++, catálogo de módulos, compatibilidade multiplayer e retratos compartilhados no pacote básico.
+
+Para criar com uma IA, use [o guia de início](../CRIAR-MOD-COM-IA.md), `AGENTS.md` e a skill `forgeloader-modding` incluída na pasta `.agents/skills` do kit.
 
 **Este primeiro artefato é um kit de desenvolvimento fora do jogo.** Cria projetos, valida manifestos/dependências, calcula fingerprints e compara perfis. Não carrega Lua/DLLs no jogo e não implementa negociação de compatibilidade no lobby. Os exemplos ainda não foram executados dentro de Kingdoms Reborn. Não foi instalada uma nova versão do runtime nem alterada sua sessão de jogo.
 

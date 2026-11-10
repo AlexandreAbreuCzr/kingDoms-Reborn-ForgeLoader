@@ -1,5 +1,12 @@
 # Histórico
 
+## 0.1.1-alpha — 2026-11-10
+
+- Skill `forgeloader-modding` incluída no Dev Kit, com referências para manifestos/Lua e integrações C++.
+- `AGENTS.md`, prompt pronto e opção Criar mod com IA no menu.
+- Empacotamento preserva a pasta da skill e os recursos necessários após extrair o ZIP.
+- Runtime de retratos v3 e estado do carregador geral permanecem iguais à versão anterior.
+
 ## 0.1.0-alpha — 2026-11-10
 
 - Nome do projeto: ForgeLoader.

@@ -1,5 +1,6 @@
 {
-  "version": "0.1.0-alpha",
+  "version": "0.1.1-alpha",
+  "ai_modding_skill": "packaged project skill and provider-neutral instructions; no embedded AI model",
   "stage": "offline development foundation",
   "project_generator": "implemented and tested",
   "manifest_dependency_validation": "implemented and tested",

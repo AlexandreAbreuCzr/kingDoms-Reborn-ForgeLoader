@@ -1,0 +1,4 @@
+interface:
+  display_name: "ForgeLoader Modding"
+  short_description: "Crie mods e confira compatibilidade no ForgeLoader"
+  default_prompt: "Use $forgeloader-modding para criar um mod de Kingdoms Reborn a partir da minha ideia, verificando as APIs disponiveis e a compatibilidade."

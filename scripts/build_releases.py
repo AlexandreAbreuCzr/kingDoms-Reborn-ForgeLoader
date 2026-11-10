@@ -30,11 +30,11 @@ def archive(path, files):
 
 def devkit_files():
     files = {}
-    for folder in ('modkit', 'native/portraits'):
+    for folder in ('modkit', 'native/portraits', '.agents/skills'):
         for path in (ROOT / folder).rglob('*'):
-            if path.is_file() and '__pycache__' not in path.parts and (path.suffix in ('.py', '.json', '.md', '.cpp', '.hpp', '.lua', '.txt') or path.name == 'CMakeLists.txt'):
+            if path.is_file() and '__pycache__' not in path.parts and (path.suffix in ('.py', '.json', '.md', '.cpp', '.hpp', '.lua', '.txt', '.yaml') or path.name == 'CMakeLists.txt'):
                 files[path.relative_to(ROOT).as_posix()] = path
-    for name in ('README.md', 'Abrir-DevKit.cmd', 'release.json', 'profiles/noasync-binary-patch.json', 'profiles/player-patch.json',
+    for name in ('README.md', 'AGENTS.md', 'CRIAR-MOD-COM-IA.md', 'Abrir-DevKit.cmd', 'release.json', 'profiles/noasync-binary-patch.json', 'profiles/player-patch.json',
                  'scripts/build_portrait_exe.py', 'scripts/build_portraits.ps1', 'scripts/setup_native.ps1',
                  'scripts/build_releases.py', 'scripts/build_modkit.py', 'scripts/prepare_player_patch.py',
                  'tests/test_modkit.py', 'tests/test_portrait_exe.py',

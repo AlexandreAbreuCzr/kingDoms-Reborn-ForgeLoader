@@ -9,7 +9,7 @@ import json
 from pathlib import Path, PurePosixPath
 import re
 
-VERSION = '0.1.0-alpha'
+VERSION = '0.1.1-alpha'
 API_MAJOR = 1
 GAME_SHA = 'a5d2385660d9e819d2aa073cdd9c1d74c05149c9617f37cbb8b31e83708c4e24'
 PORTRAITS_SHA = '3664b38d0c53d03bdc5b90d7f04748a64f7234fb0c9ae9cc547940c865b8a3a1'

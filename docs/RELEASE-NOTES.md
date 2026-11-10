@@ -1,18 +1,16 @@
-# ForgeLoader 0.1.0-alpha
+# ForgeLoader 0.1.1-alpha — criação com IA
 
-Dois downloads separados:
+O Dev Kit agora inclui:
 
-- **ForgeLoader-Players-0.1.0-alpha.zip**: extraia e abra `Instalar-ForgeLoader.cmd`. Escolha a pasta da sua cópia do jogo. O instalador verifica o build, aplica o runtime de retratos v3 e guarda backup. `Restaurar-Backup.cmd` volta ao estado anterior.
-- **ForgeLoader-DevKit-0.1.0-alpha.zip**: extraia e abra `Abrir-DevKit.cmd` para criar um projeto ou conferir exemplos. Requer Python 3.10+ para desenvolvimento.
+- Skill `forgeloader-modding`, com orientações para criar/revisar mods, manifestos, Lua/C++ e compatibilidade multiplayer.
+- `AGENTS.md` na raiz do projeto.
+- `CRIAR-MOD-COM-IA.md`, com um pedido pronto para usar em Codex ou outro assistente com acesso aos arquivos.
+- Opção **4 — Criar mod com IA** no menu `Abrir-DevKit.cmd`.
 
-O pacote para jogadores inclui a DLL do runtime e um patch pequeno aplicado localmente. Não inclui o jogo completo ou um EXE do jogo. Não precisa instalar Python ou o Dev Kit para jogar.
+Extraia **ForgeLoader-DevKit-0.1.1-alpha.zip** e abra a pasta no seu assistente. No Codex, peça: `Use $forgeloader-modding para criar um mod que...`. Em outros assistentes, forneça o guia, a skill completa e os arquivos relevantes.
 
-## Estado deste alpha
+O kit não inclui um modelo de IA embutido nem solicita chave de API. A skill orienta o desenvolvimento e a validação; não acrescenta um carregador de scripts ao jogo.
 
-Importação local de fotos executada, com normalização para 128 × 128 e até 8 KiB. O código foi preparado para enviar a imagem pela partida sem cópia manual por cada participante. Recepção entre PCs ainda não foi validada.
+O download para jogadores permanece separado. O runtime de retratos v3 não foi alterado e quem já o usa não precisa reinstalar por causa desta atualização do Dev Kit. O carregador geral, a API integrada e a checagem no lobby continuam em desenvolvimento. Recepção de fotos entre PCs e ganho de FPS permanecem sem confirmação.
 
-O carregador geral de mods, a API integrada Lua/C++ e a checagem no lobby **ainda estão em desenvolvimento**. Os exemplos do Dev Kit não são carregados pelo jogo atual só por colocá-los numa pasta. Não há ganho de FPS medido nem correção confirmada para a GTX 1080.
-
-Testes locais cobrem validação de manifestos, dependências, empacotamento, instalação, restauração e preservação do EXE. Fontes nativas compilados com testes de protocolo, visibilidade e imagem. CI não executa o jogo.
-
-`SHA256SUMS.txt` e `release-manifest.json` permitem conferir os downloads. Guias completos e o roadmap estão no repositório.
+Os ZIPs, `SHA256SUMS.txt` e `release-manifest.json` acompanham esta Release. A versão anterior continua disponível no histórico.

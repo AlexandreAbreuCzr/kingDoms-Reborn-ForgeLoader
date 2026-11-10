@@ -1,6 +1,8 @@
 from pathlib import Path
 import importlib.util
 import json
+import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -14,6 +16,31 @@ spec.loader.exec_module(release_builder)
 
 
 class ReleasePackageTests(unittest.TestCase):
+    def test_ai_skill_and_local_references_survive_extraction(self):
+        output = release_builder.build(devkit_only=True)
+        config = json.loads((ROOT / 'release.json').read_text())
+        with zipfile.ZipFile(output / config['devkit_archive']) as archive, tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            archive.extractall(root)
+            self.assertTrue((root / 'AGENTS.md').is_file())
+            guide = root / 'CRIAR-MOD-COM-IA.md'
+            self.assertTrue(guide.is_file())
+            skill = root / '.agents/skills/forgeloader-modding'
+            self.assertTrue((skill / 'SKILL.md').is_file())
+            self.assertTrue((skill / 'agents/openai.yaml').is_file())
+            for markdown in skill.rglob('*.md'):
+                for link in re.findall(r'\[[^\]]+\]\(([^)]+)\)', markdown.read_text(encoding='utf-8')):
+                    if '://' in link or link.startswith('#'): continue
+                    target = (markdown.parent / link.split('#', 1)[0]).resolve()
+                    self.assertTrue(target.is_relative_to(skill.resolve()), f'Skill resource outside bundle: {link}')
+                    self.assertTrue(target.is_file(), f'Missing bundled resource: {link}')
+            result = subprocess.run([sys.executable, 'modkit/wizard.py'], input='4\n0\n',
+                                    cwd=root, capture_output=True, text=True, encoding='utf-8',
+                                    errors='replace', timeout=15, env={**os.environ, 'PYTHONUTF8': '1'})
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn(guide.read_text(encoding='utf-8'), result.stdout)
+            self.assertFalse((root / 'MeusMods').exists(), 'Viewing AI instructions must not create or alter mod projects')
+
     def test_devkit_extracts_and_menu_creates_a_valid_project(self):
         output = release_builder.build(devkit_only=True)
         config = json.loads((ROOT / 'release.json').read_text())

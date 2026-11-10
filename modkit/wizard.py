@@ -9,7 +9,7 @@ def main():
     print('ForgeLoader Dev Kit — projetos e validacao offline')
     print('O carregador de scripts dentro do jogo ainda esta em desenvolvimento.\n')
     while True:
-        print('1. Criar projeto Lua\n2. Conferir exemplos\n3. Conferir MeusMods\n0. Sair')
+        print('1. Criar projeto Lua\n2. Conferir exemplos\n3. Conferir MeusMods\n4. Criar mod com IA\n0. Sair')
         choice = input('Escolha: ').strip()
         if choice == '0': return
         try:
@@ -24,6 +24,10 @@ def main():
                 folder = ROOT / ('modkit/examples/lua' if choice == '2' else 'MeusMods')
                 mods = discover(folder)
                 print('Manifestos validos. Ordem: ' + ', '.join(load_order(mods)))
+            elif choice == '4':
+                guide = ROOT / 'CRIAR-MOD-COM-IA.md'
+                print(guide.read_text(encoding='utf-8'))
+                print(f'\nGuia para copiar ou enviar a sua IA: {guide}\n')
             else: print('Escolha uma opcao da lista.')
         except (ModError, OSError) as error:
             print(f'Nao foi possivel: {error}\n')

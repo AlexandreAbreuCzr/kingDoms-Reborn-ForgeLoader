@@ -1,4 +1,4 @@
-# Estado do ForgeLoader 0.1.0-alpha
+# Estado do ForgeLoader 0.1.1-alpha
 
 | Recurso | Estado |
 | --- | --- |
@@ -7,6 +7,7 @@
 | Envio pelo RPC existente | Chamada local executada; recepção remota não validada |
 | Fotos automáticas entre PCs e entrada tardia | Pendente de teste |
 | Gerador de projetos e exemplos Lua/C++ | Disponíveis no Dev Kit |
+| Instruções para IA e skill de criação de mods | Incluídas no Dev Kit; exigem um assistente com acesso aos arquivos |
 | Verificação de dependências e arquivos | Implementada fora do jogo |
 | Carregador geral de mods | Em desenvolvimento; não implementado |
 | API Lua/C++ integrada ao jogo | Não implementada |
