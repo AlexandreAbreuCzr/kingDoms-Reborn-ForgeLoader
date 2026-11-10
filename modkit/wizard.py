@@ -7,7 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     print('ForgeLoader Dev Kit — projetos e validacao offline')
-    print('O carregador de scripts dentro do jogo ainda esta em desenvolvimento.\n')
+    print('Projetos Lua locais executam no ForgeLoader 0.2. Veja docs/MOD-API.md.\n')
     while True:
         print('1. Criar projeto Lua\n2. Conferir exemplos\n3. Conferir MeusMods\n4. Criar mod com IA\n0. Sair')
         choice = input('Escolha: ').strip()
@@ -21,7 +21,7 @@ def main():
                 new_mod(folder, ident, name, shared)
                 print(f'Projeto criado em: {folder}\n')
             elif choice in ('2', '3'):
-                folder = ROOT / ('modkit/examples/lua' if choice == '2' else 'MeusMods')
+                folder = ROOT / ('modkit/examples/forgeloader' if choice == '2' else 'MeusMods')
                 mods = discover(folder)
                 print('Manifestos validos. Ordem: ' + ', '.join(load_order(mods)))
             elif choice == '4':

@@ -1,16 +1,11 @@
-# ForgeLoader 0.1.1-alpha — criação com IA
+# ForgeLoader 0.2.0-alpha
 
-O Dev Kit agora inclui:
+Esta versão carrega mods Lua e DLL x64 no jogo. Atualize o pacote **ForgeLoader para jogadores**, instale um arquivo **.flmod** pelo botão **Instalar mod** ou por **ForgeLoader/Instalar-Mod.cmd**, e reinicie o jogo. **Meus mods** mostra os mods carregados e seus erros.
 
-- Skill `forgeloader-modding`, com orientações para criar/revisar mods, manifestos, Lua/C++ e compatibilidade multiplayer.
-- `AGENTS.md` na raiz do projeto.
-- `CRIAR-MOD-COM-IA.md`, com um pedido pronto para usar em Codex ou outro assistente com acesso aos arquivos.
-- Opção **4 — Criar mod com IA** no menu `Abrir-DevKit.cmd`.
+Downloads separados: pacote para jogadores, Dev Kit e três exemplos `.flmod` (título, limite de FPS e DLL). O pacote para jogadores também inclui os dois exemplos Lua para instalação opcional. Não distribui o jogo nem exige Python/Lua no PC de quem joga.
 
-Extraia **ForgeLoader-DevKit-0.1.1-alpha.zip** e abra a pasta no seu assistente. No Codex, peça: `Use $forgeloader-modding para criar um mod que...`. Em outros assistentes, forneça o guia, a skill completa e os arquivos relevantes.
+Os três exemplos foram executados no jogo local. Foram verificados o título da janela, callback Lua, callback nativo e limite de FPS com leitura de confirmação do motor. 32 testes Python/PowerShell passaram, além dos testes nativos de protocolo, imagens e execução Lua/DLL.
 
-O kit não inclui um modelo de IA embutido nem solicita chave de API. A skill orienta o desenvolvimento e a validação; não acrescenta um carregador de scripts ao jogo.
+A captura automática da janela falhou; aparência e cliques do painel não foram validados automaticamente. O importador de fotos existente foi preservado. Negociação no lobby e mods de simulação compartilhada ainda não estão implementados; esta versão aceita mods locais. Recepção de fotos entre PCs, ganho de FPS e correção do crash da GTX 1080 não estão confirmados.
 
-O download para jogadores permanece separado. O runtime de retratos v3 não foi alterado e quem já o usa não precisa reinstalar por causa desta atualização do Dev Kit. O carregador geral, a API integrada e a checagem no lobby continuam em desenvolvimento. Recepção de fotos entre PCs e ganho de FPS permanecem sem confirmação.
-
-Os ZIPs, `SHA256SUMS.txt` e `release-manifest.json` acompanham esta Release. A versão anterior continua disponível no histórico.
+O Dev Kit foi atualizado com a API implementada, gerador, empacotador e instruções para IA. Os exemplos antigos de UE4SS exigem portabilidade. Compatibilidade limitada ao build 0.253 identificado no perfil; há verificação de hash, backup, atualização do runtime v3 e restauração.

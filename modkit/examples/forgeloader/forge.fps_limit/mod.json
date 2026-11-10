@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "forge.fps_limit",
+  "name": "Limite de FPS",
+  "version": "1.0.0",
+  "api_major": 1,
+  "runtime": "forgeloader-lua",
+  "entrypoint": "Scripts/main.lua",
+  "game_builds": [
+    "a5d2385660d9e819d2aa073cdd9c1d74c05149c9617f37cbb8b31e83708c4e24"
+  ],
+  "multiplayer": "local",
+  "enabled": true,
+  "requires": {},
+  "conflicts": [],
+  "settings": {
+    "fps": 60
+  }
+}

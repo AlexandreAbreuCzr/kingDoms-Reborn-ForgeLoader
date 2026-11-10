@@ -1,19 +1,18 @@
-# Estado do ForgeLoader 0.1.1-alpha
+# Estado do ForgeLoader 0.2.0-alpha
 
 | Recurso | Estado |
 | --- | --- |
-| Instalador para a cópia existente do jogo | Implementado, com hash e backup |
-| Runtime nativo de retratos v3 | Importação local executada |
-| Envio pelo RPC existente | Chamada local executada; recepção remota não validada |
-| Fotos automáticas entre PCs e entrada tardia | Pendente de teste |
-| Gerador de projetos e exemplos Lua/C++ | Disponíveis no Dev Kit |
-| Instruções para IA e skill de criação de mods | Incluídas no Dev Kit; exigem um assistente com acesso aos arquivos |
-| Verificação de dependências e arquivos | Implementada fora do jogo |
-| Carregador geral de mods | Em desenvolvimento; não implementado |
-| API Lua/C++ integrada ao jogo | Não implementada |
-| Checagem de mods no lobby | Não implementada |
+| Instalador do loader, atualização do v3, backup e restauração | Implementados e testados |
+| Instalação de pacotes .flmod e pasta Mods | Implementada e testada |
+| Carregamento de mods Lua e DLL x64 | Implementado; três exemplos executados no jogo local |
+| API de logs, título, FPS e eventos | Integrada à thread do jogo; exemplos executados |
+| Dependências, conflitos, ciclos, erros por mod | Implementados; testes nativos |
+| Painel Meus mods / Abrir pasta / Instalar mod | Criado no jogo; captura automática indisponível neste teste |
+| Dev Kit e instruções de IA | Atualizados para a API integrada |
+| Importador de retratos | Protótipo preservado; importação local validada anteriormente |
+| Fotos automáticas entre PCs e entrada tardia | Recepção remota ainda não validada |
+| Negociação no lobby e simulação compartilhada | Não implementadas; mods required recusados |
+| Acesso Lua genérico a todos os objetos Unreal | Não implementado |
 | Ganho de FPS / correção para GTX 1080 | Não confirmado |
 
-O nome ForgeLoader representa o projeto em construção. O download atual para jogadores oferece o runtime de retratos; colocar um script ou DLL adicional na pasta do jogo ainda não o transforma em um mod carregado.
-
-Os testes automatizados de configuração e instalador usam pastas temporárias. Testes que precisam do EXE original são pulados quando esse arquivo não é fornecido. Uma execução de CI sem o jogo não comprova estabilidade, renderização ou compatibilidade multiplayer.
+[Detalhes da validação](VALIDATION-0.2.0.md). O runtime aceita somente o build identificado e mods locais. Os testes do CI não incluem execução do jogo. O limite de FPS não é uma medição de ganho de desempenho.

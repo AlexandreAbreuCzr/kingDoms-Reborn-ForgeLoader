@@ -4,7 +4,8 @@ Use estes critérios quando a tarefa exigir C++, hooks ou alteração do adaptad
 
 ## Pontos de partida
 
-- `modkit/examples/native/kr_native`: exemplo-fonte de ciclo de vida C++ do UE4SS. Ele depende do SDK escolhido; não inclui DLL já testada no jogo.
+- `modkit/examples/native/forge_native`: exemplo executável da ABI C, exportando `ForgeMod_Load`; cabeçalho em `native/loader/forgeloader_api.h`. ID e versão exportados devem coincidir com o manifesto. Callbacks rodam na thread do jogo; DLLs permanecem carregadas até encerrar o processo.
+- `modkit/examples/native/kr_native`: referência antiga do UE4SS; não executa no runtime integrado sem portabilidade.
 - `native/portraits/portraits.cpp`: integração atual do importador e das rotinas nativas de retrato.
 - `scripts/native_symbols.py` e `scripts/pdb_types.py`: identidade PE/PDB, símbolos e layouts do build fornecido.
 - `scripts/setup_native.ps1` e `scripts/build_portraits.ps1`: dependência MinHook fixada, compilação e testes nativos.

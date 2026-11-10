@@ -15,7 +15,7 @@ Esses estados mudam com as versões. A existência de exemplos, de um manifesto 
 
 ## Escolher a implementação
 
-- Para um projeto Lua ou suas dependências, use [manifesto e scripts](references/manifest-and-lua.md). Consulte `modkit/examples/lua` e prefira gerar a estrutura pelo CLI existente.
+- Para um projeto Lua ou suas dependências, use [manifesto e scripts](references/manifest-and-lua.md). Consulte `modkit/examples/forgeloader` e prefira gerar e empacotar pelo CLI existente. A API executada está em `docs/MOD-API.md`.
 - Para módulo C++, hook ou acesso a propriedades nativas, use [integração nativa](references/native-integration.md). Consulte `modkit/examples/native` e o runtime já existente em `native/portraits` conforme a tarefa.
 - Se o pedido depende de uma API ausente, identifique a integração necessária. Implemente a ponte quando fizer parte do escopo solicitado; caso contrário, entregue a estrutura útil com essa dependência marcada como pendente. Não substitua chamadas inexistentes por código apresentado como funcional.
 

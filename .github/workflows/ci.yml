@@ -21,7 +21,9 @@ jobs:
       - name: Python and installer tests
         run: python -m unittest discover -s tests -v
       - name: Validate example manifests
-        run: python modkit/krmodkit.py validate modkit/examples/lua
+        run: |
+          python modkit/krmodkit.py validate modkit/examples/forgeloader
+          python modkit/krmodkit.py validate modkit/examples/lua
       - name: Build developer download
         run: python scripts/build_releases.py --devkit-only
       - name: Prepare pinned MinHook

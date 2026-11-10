@@ -70,10 +70,23 @@ class PlayerInstallerTests(unittest.TestCase):
             self.invoke(root, package, saved, 'Install', False)
             self.assertFalse((root / 'game/ForgeLoader').exists())
 
+    def test_known_runtime_upgrade_preserves_previous_dll_for_restore(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);exe,package,saved,target=self.prepare(root)
+            exe.write_bytes(target)
+            old=b'previous trusted runtime';dll=exe.parent/'KingdomsPortraits.dll';dll.write_bytes(old)
+            patch_path=package/'payload/player-patch.json';patch=json.loads(patch_path.read_text())
+            patch['upgrade_from_dll_sha256']=[hashlib.sha256(old).hexdigest()];patch_path.write_text(json.dumps(patch))
+            self.assertEqual(self.invoke(root,package,saved,'Install')['status'],'installed')
+            self.assertNotEqual(dll.read_bytes(),old)
+            self.invoke(root,package,saved,'Restore')
+            self.assertEqual(dll.read_bytes(),old)
+            self.assertEqual(exe.read_bytes(),target)
+
     @unittest.skipUnless((ROOT / '.local/original-image/PrototypeCity-Win64-Shipping.exe').exists(), 'Local original game fixture required')
     def test_real_release_patch_and_dll_restore_original(self):
         original = (ROOT / '.local/original-image/PrototypeCity-Win64-Shipping.exe').read_bytes()
-        dll_path = ROOT / 'dist/KingdomsReborn-Retratos-v3-Experimental/PunCity/Binaries/Win64/KingdomsPortraits.dll'
+        dll_path = ROOT / '.local/portrait-build/KingdomsPortraits.dll'
         if not dll_path.exists(): self.skipTest('Validated runtime fixture required')
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder); exe, package, saved, _ = self.prepare(root, original, original)

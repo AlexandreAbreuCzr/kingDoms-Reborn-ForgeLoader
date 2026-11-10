@@ -43,8 +43,9 @@ function Invoke-Install($Layout,[string]$Saved) {
     $raw=[IO.File]::ReadAllBytes($Layout.Exe);$current=Get-BytesHash $raw
     if($current -ne $patch.source_sha256 -and $current -ne $patch.target_sha256){throw 'Versao do jogo diferente da suportada. Nenhum arquivo foi alterado.'}
     $hadDll=Test-Path -LiteralPath $Layout.Dll
-    if($hadDll -and (Get-BytesHash ([IO.File]::ReadAllBytes($Layout.Dll))) -ne $patch.dll_sha256){throw 'Ja existe outra versao de KingdomsPortraits.dll. Preserve-a e restaure a instalacao original antes de continuar.'}
-    if($current -eq $patch.target_sha256 -and $hadDll){return @{status='already-installed';message='ForgeLoader Retratos v3 ja esta instalado.'}}
+    $currentDll=if($hadDll){Get-BytesHash ([IO.File]::ReadAllBytes($Layout.Dll))}else{''}
+    if($hadDll -and $currentDll -ne $patch.dll_sha256 -and @($patch.upgrade_from_dll_sha256) -notcontains $currentDll){throw 'Ja existe um runtime desconhecido. Arquivos preservados; restaure a instalacao original antes de continuar.'}
+    if($current -eq $patch.target_sha256 -and $hadDll -and $currentDll -eq $patch.dll_sha256){Install-ModTools $Layout;return @{status='already-installed';message='ForgeLoader ja esta instalado. Use Instalar-Mod.cmd ou o botao Instalar mod no jogo.'}}
     Assert-GameClosed $Layout
     if($current -eq $patch.source_sha256){
         if($raw.Length -ne $patch.source_length){throw 'Tamanho original inesperado'}
@@ -75,13 +76,22 @@ function Invoke-Install($Layout,[string]$Saved) {
     try {
         Write-Atomic $Layout.Exe $modified
         Write-Atomic $Layout.Dll $payload.Dll
+        Install-ModTools $Layout
         $record | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $Layout.Data 'last-install.json') -Encoding UTF8
     }catch{
         Write-Atomic $Layout.Exe $raw
         if($hadDll){Write-Atomic $Layout.Dll ([IO.File]::ReadAllBytes((Join-Path $backup 'runtime.dll')))}elseif(Test-Path -LiteralPath $Layout.Dll){Remove-Item -LiteralPath $Layout.Dll}
         throw
     }
-    return @{status='installed';backup=$backup;message='Instalado! Abra o jogo e entre em Configuracoes do Lider para importar sua foto.'}
+    return @{status='installed';backup=$backup;message='Instalado! Abra o jogo e use Meus mods ou Instalar mod. Fotos ficam em Configuracoes do Lider.'}
+}
+function Install-ModTools($Layout) {
+    [IO.Directory]::CreateDirectory((Join-Path $Layout.Root 'Mods'))|Out-Null
+    [IO.Directory]::CreateDirectory($Layout.Data)|Out-Null
+    foreach($name in @('Install-Mod.ps1','Instalar-Mod.cmd')){
+        $source=Join-Path $PSScriptRoot $name
+        if(Test-Path -LiteralPath $source){Write-Atomic (Join-Path $Layout.Data $name) ([IO.File]::ReadAllBytes($source))}
+    }
 }
 function Invoke-Restore($Layout,[string]$Saved) {
     Assert-GameClosed $Layout

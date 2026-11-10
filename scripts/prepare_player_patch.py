@@ -8,7 +8,7 @@ import struct
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_SHA = '8f2653ba07d53c3e01eb68a3f0a9a5851ef96e84d42181a5dd7a279740d0033c'
 TARGET_SHA = 'a5d2385660d9e819d2aa073cdd9c1d74c05149c9617f37cbb8b31e83708c4e24'
-DLL_SHA = '3664b38d0c53d03bdc5b90d7f04748a64f7234fb0c9ae9cc547940c865b8a3a1'
+DLL_SHA = '51ca84fbfd4918547a7a974a14095906548e5e7d1e170dcace2dfe26802de547'
 
 
 def create_patch(source, target):
@@ -30,7 +30,8 @@ def create_patch(source, target):
     return {'schema': 1, 'source_sha256': SOURCE_SHA, 'target_sha256': TARGET_SHA,
             'dll_sha256': DLL_SHA, 'source_length': len(source), 'target_length': len(target),
             'changes': changes, 'append_hex': target[len(source):].hex(),
-            'general_mod_loader': False, 'runtime': 'portraits-v3', 'noasync_patch_applied': False}
+            'general_mod_loader': True, 'runtime': 'forgeloader-0.2.0',
+            'upgrade_from_dll_sha256': ['3664b38d0c53d03bdc5b90d7f04748a64f7234fb0c9ae9cc547940c865b8a3a1'], 'noasync_patch_applied': False}
 
 
 if __name__ == '__main__':

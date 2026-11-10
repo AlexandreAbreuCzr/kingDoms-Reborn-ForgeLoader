@@ -61,7 +61,7 @@ class ReleasePackageTests(unittest.TestCase):
 
     def test_small_patch_contains_no_texture_or_game_code_changes(self):
         patch = json.loads((ROOT / 'profiles/player-patch.json').read_text())
-        self.assertFalse(patch['general_mod_loader'])
+        self.assertTrue(patch['general_mod_loader'])
         self.assertFalse(patch['noasync_patch_applied'])
         self.assertLess(len(patch['append_hex']), 16384)
         self.assertTrue(all(0 <= row['offset'] < 4096 for row in patch['changes']))

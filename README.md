@@ -1,65 +1,48 @@
 # ForgeLoader para Kingdoms Reborn
 
-Uma base comunitária para retratos personalizados e, futuramente, mods em Lua/C++. O projeto está em **alpha**. O runtime atual oferece os retratos; o carregador geral de mods ainda está em desenvolvimento.
+Instale mods Lua e C++ no Kingdoms Reborn. A versão **0.2.0-alpha** inclui o carregador, o importador de fotos e exemplos que executam dentro do jogo.
 
-## Escolha seu download
+## Downloads
 
-| Quero… | Download | Como usar |
-| --- | --- | --- |
-| **Jogar com os retratos** | [ForgeLoader para jogadores](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.1.1-alpha/ForgeLoader-Players-0.1.1-alpha.zip) | Extraia, abra `Instalar-ForgeLoader.cmd` e escolha a pasta do jogo. |
-| **Criar e estudar mods** | [ForgeLoader Dev Kit](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.1.1-alpha/ForgeLoader-DevKit-0.1.1-alpha.zip) | Extraia e abra `Abrir-DevKit.cmd`. Requer Python 3.10+ para desenvolvimento. |
+| Quero | Arquivo |
+| --- | --- |
+| Instalar o ForgeLoader no jogo | [ForgeLoader para jogadores](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.0-alpha/ForgeLoader-Players-0.2.0-alpha.zip) |
+| Criar mods, inclusive com IA | [Dev Kit](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.0-alpha/ForgeLoader-DevKit-0.2.0-alpha.zip) |
+| Testar meu primeiro mod | [Título da janela](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.0-alpha/forge.hello-1.0.0.flmod) |
+| Limitar o consumo de GPU | [Limite de 60 FPS](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.0-alpha/forge.fps_limit-1.0.0.flmod) |
+| Estudar um mod nativo compilado | [Exemplo C++](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.0-alpha/forge.native_hello-1.0.0.flmod) |
 
-[Todos os arquivos e versões](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases) · [Guia para jogadores](docs/PLAYERS.md) · [Guia do Dev Kit](docs/DEVELOPMENT.md)
+## Instalar e usar
 
-O download para jogadores aplica o runtime à sua cópia existente do jogo, com backup. Não inclui o jogo completo e não exige Dev Kit, Python ou compilador. Os arquivos de conferência SHA-256 ficam junto aos downloads na Release.
+1. Extraia o pacote para jogadores, feche o jogo e abra **Instalar-ForgeLoader.cmd**. Escolha a pasta do jogo.
+2. Baixe um mod `.flmod`. Abra **Instalar mod** dentro do jogo ou **ForgeLoader/Instalar-Mod.cmd** na pasta do jogo e selecione o arquivo.
+3. Reinicie o jogo e use **Meus mods** para conferir o resultado. O mod de exemplo muda o título da janela.
 
-## Criar mods com IA
+Você também pode copiar a pasta descompactada para `Mods/autor.nome/`, com `mod.json` diretamente dentro dela. `.flmod` é um ZIP, não um JAR. Não copie apenas o arquivo `.flmod` para Mods: use o instalador ou extraia sua pasta.
 
-O Dev Kit inclui `AGENTS.md`, a skill **forgeloader-modding** e um prompt pronto. Abra a pasta no seu assistente de programação e peça: `Use $forgeloader-modding para criar um mod que...`. A opção **4 — Criar mod com IA** do menu mostra o guia. [Como usar com Codex ou outra IA](CRIAR-MOD-COM-IA.md).
+O download não inclui o jogo e não exige Python, Lua ou compilador para jogar. Há backup e restauração. O pacote para jogadores já traz dois mods de exemplo para instalar opcionalmente.
 
-A skill orienta o desenvolvimento; o carregador geral e a API dentro do jogo continuam em construção. Esta atualização não altera o runtime de retratos instalado.
+## Recursos e limites
 
-## O que já funciona
+- Runtime Lua 5.4.9 integrado, módulos DLL x64 com ABI C e callbacks na thread do jogo.
+- Verificação de build/API, dependências, versões, ciclos e conflitos; relatório de erros por mod.
+- API inicial para logs, título, limite de FPS e eventos. [API e formato dos pacotes](docs/MOD-API.md).
+- Importador PNG/JPG em **Configurações do Líder**, preservando o protótipo de fotos compartilhadas.
 
-- Importador de PNG/JPG em **Configurações do Líder**.
-- Foto normalizada para 128 × 128 e até 8 KiB, com remoção/restauração do retrato.
-- Instalador com conferência do build, backup e restauração.
-- Gerador de projetos, exemplos Lua/C++ e verificação offline de dependências/arquivos.
+Os três exemplos foram executados no jogo local. O carregador ainda aceita **mods locais**; a negociação no lobby e mods de simulação compartilhada estão em desenvolvimento. A recepção das fotos em outro PC ainda não foi validada. Não há ganho de FPS medido nem correção confirmada para o crash da GTX 1080. O limite de FPS reduz a taxa máxima; não aumenta o desempenho do computador.
 
-O código de fotos foi preparado para transmitir a imagem pela partida. Cada jogador não precisa copiar a foto manualmente; todos precisam do runtime compatível. A recepção em outro PC ainda aguarda teste real.
+Este adaptador aceita o build 0.253 identificado pelo hash em `profiles/player-patch.json`. Outros builds precisam de adaptação. Mods de UE4SS e de outros jogos não são carregados automaticamente.
 
-## O que ainda está em desenvolvimento
+[Guia para jogadores](docs/PLAYERS.md) · [Criar mods](docs/DEVELOPMENT.md) · [Criar com IA](CRIAR-MOD-COM-IA.md) · [Estado](docs/STATUS.md) · [Validação desta versão](docs/VALIDATION-0.2.0.md) · [Todas as versões](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases)
 
-Copiar novos mods para uma pasta ainda não os carrega. Faltam o carregador geral, a API integrada e a checagem de compatibilidade no lobby. Os exemplos Lua/C++ são materiais de desenvolvimento, não mods de gameplay já validados. Não há ganho de FPS medido ou correção confirmada para a GTX 1080.
+## Código e desenvolvimento
 
-Veja [o estado de cada função](docs/STATUS.md), [próximas etapas](docs/ROADMAP.md) e [histórico de versões](CHANGELOG.md).
-
-## Organização do código
-
-```text
-installer/          Instalação e restauração para jogadores
-native/portraits/   Runtime nativo de retratos v3
-modkit/             Ferramentas do SDK e exemplos Lua/C++
-profiles/           Identificação do build e patch de cabeçalhos PE
-scripts/            Compilação, empacotamento e análise
-tests/              Testes automatizados
-docs/               Guias de uso, desenvolvimento e roadmap
-tools/rea/          REA e seus submódulos fixados
-```
-
-Downloads compilados ficam em Releases. `dist/`, backups, diagnósticos, saves, fotos e binários do jogo ficam fora do Git.
-
-## Desenvolver
+`native/loader` contém o loader e a ABI; `native/portraits` contém o adaptador do jogo e as fotos; `modkit` contém gerador, empacotador e exemplos; `installer` contém os instaladores. `tools/rea` mantém REA e seus submódulos fixados. Binários, fotos, saves, backups e diagnósticos pessoais ficam fora do Git.
 
 ```powershell
-git clone https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader.git
-cd kingDoms-Reborn-ForgeLoader
 python -m unittest discover -s tests -v
-python scripts/build_releases.py --devkit-only
+powershell -NoProfile -File scripts/setup_native.ps1
+powershell -NoProfile -File scripts/build_portraits.ps1
 ```
 
-Os testes que exigem o EXE original são pulados se ele não for fornecido. Para validar o patch real, defina `KINGDOMS_ORIGINAL_EXE` com uma cópia original do build suportado. O CI também compila os fontes nativos e executa seus testes, sem executar o jogo.
-
-Para obter as ferramentas REA no Windows: `powershell -NoProfile -File scripts/initialize_rea.ps1`. Para o runtime, consulte [compilação no guia de desenvolvimento](docs/DEVELOPMENT.md).
-
-[Como contribuir](CONTRIBUTING.md) · [Relatar um problema](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/issues/new/choose)
+O CI compila Lua, loader, exemplo C++ e executa os testes nativos. Testes que precisam do jogo original são pulados quando o fixture não é fornecido. Não há execução do jogo no CI. [Contribuir](CONTRIBUTING.md).

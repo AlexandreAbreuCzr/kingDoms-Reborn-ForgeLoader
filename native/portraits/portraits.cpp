@@ -13,6 +13,11 @@
 #include <memory>
 #include <algorithm>
 #include <cstring>
+#include <filesystem>
+#include <chrono>
+#include <cmath>
+#include <shellapi.h>
+#include "../loader/loader.hpp"
 #include "MinHook.h"
 #include "protocol.hpp"
 #include "panel_state.hpp"
@@ -20,6 +25,7 @@
 #pragma comment(lib,"comdlg32.lib")
 #pragma comment(lib,"ole32.lib")
 #pragma comment(lib,"advapi32.lib")
+#pragma comment(lib,"shell32.lib")
 
 namespace {
 using Bytes=std::vector<uint8_t>;
@@ -28,7 +34,8 @@ struct Info {alignas(8) uint8_t bytes[96];FString& portrait(){return *reinterpre
 struct Weak {int index=-1,serial=0;};
 struct ByteArray {const uint8_t* data;int num,max;};
 static_assert(sizeof(FString)==16 && sizeof(Info)==96 && sizeof(Weak)==8);
-uintptr_t base=0;HWND gameWindow=nullptr;std::atomic<ULONGLONG> lastLobby{0};
+uintptr_t base=0;std::atomic<HWND> gameWindow{nullptr};std::atomic<ULONGLONG> lastLobby{0};
+void modsLobbyTick();
 std::atomic<bool> settingsOpen{false};bool choosingFile=false;
 std::mutex pendingMutex;Bytes pendingJpeg;int pendingAction=0;std::wstring lastFallback;
 void log(const char* text){
@@ -132,6 +139,7 @@ void __fastcall hookedLobby(void* self,void* element,int id,const void* save){
 }
 void __fastcall hookedTick(void* self){
     originalTick(self);
+    modsLobbyTick();
     // PDB: ULobbyUI::LobbyChooseLogoOverlay +0x3c0, UWidget::Visibility +0xc3.
     auto* overlay=*reinterpret_cast<uint8_t**>(static_cast<uint8_t*>(self)+0x3c0);
     bool open=overlay&&krphoto::settings_visible(overlay[0xc3]);
@@ -200,18 +208,22 @@ bool matchingExecutable(){
     }
     if(hash)CryptDestroyHash(hash);if(provider)CryptReleaseContext(provider,0);CloseHandle(file);return valid;
 }
+#include "mod_bridge.hpp"
 DWORD WINAPI run(void*){
     base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));
     if(!matchingExecutable()){log("Unsupported executable; hooks refused");return 1;}
+    if(!prepareMods())return 1;
     Gdiplus::GdiplusStartupInput input;ULONG_PTR gdip=0;if(Gdiplus::GdiplusStartup(&gdip,&input,nullptr)!=Gdiplus::Ok)return 1;
     if(MH_Initialize()!=MH_OK)return 1;
     if(MH_CreateHook(reinterpret_cast<void*>(base+0x27b11a0),reinterpret_cast<void*>(hookedUI),reinterpret_cast<void**>(&originalUI))!=MH_OK||
        MH_CreateHook(reinterpret_cast<void*>(base+0x28c8200),reinterpret_cast<void*>(hookedLobby),reinterpret_cast<void**>(&originalLobby))!=MH_OK||
        MH_CreateHook(reinterpret_cast<void*>(base+0x288f2c0),reinterpret_cast<void*>(hookedGet),reinterpret_cast<void**>(&originalGet))!=MH_OK||
        MH_CreateHook(reinterpret_cast<void*>(base+0x28bd8f0),reinterpret_cast<void*>(hookedTick),reinterpret_cast<void**>(&originalTick))!=MH_OK||
-       MH_CreateHook(reinterpret_cast<void*>(base+0x408c7d0),reinterpret_cast<void*>(hookedSet),reinterpret_cast<void**>(&originalSet))!=MH_OK||MH_EnableHook(MH_ALL_HOOKS)!=MH_OK){MH_DisableHook(MH_ALL_HOOKS);MH_Uninitialize();log("Hook installation failed; hooks removed");return 1;}
+       MH_CreateHook(reinterpret_cast<void*>(base+0x408c7d0),reinterpret_cast<void*>(hookedSet),reinterpret_cast<void**>(&originalSet))!=MH_OK||
+       MH_CreateHook(reinterpret_cast<void*>(base+0x1ff9520),reinterpret_cast<void*>(hookedEngineTick),reinterpret_cast<void**>(&originalEngineTick))!=MH_OK||MH_EnableHook(MH_ALL_HOOKS)!=MH_OK){MH_DisableHook(MH_ALL_HOOKS);MH_Uninitialize();log("Hook installation failed; hooks removed");return 1;}
     log("Portrait runtime v3 initialized; original D3D policy; leader settings panel");
     while(!gameWindow){EnumWindows(findWindow,0);Sleep(250);}
+    createModsPanel();
     HINSTANCE instance=GetModuleHandleW(L"KingdomsPortraits.dll");WNDCLASSW cls{};cls.lpfnWndProc=panelProc;cls.hInstance=instance;cls.lpszClassName=L"KRPortraitPanel1";cls.hbrBackground=reinterpret_cast<HBRUSH>(COLOR_BTNFACE+1);RegisterClassW(&cls);
     // Owned popup is composed above the DirectX surface. A GDI child HWND can
     // be covered by the game's swap chain. No topmost flag or separate process.

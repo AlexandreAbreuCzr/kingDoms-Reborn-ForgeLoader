@@ -32,6 +32,6 @@ O kit fornece instruções para sua IA; não inclui um modelo de IA embutido nem
 
 ## Limite importante deste alpha
 
-O carregador geral de scripts, a API integrada e a negociação de mods no lobby continuam em desenvolvimento. Uma IA pode produzir um projeto ou uma proposta de integração sem que esse mod já execute no jogo. O resultado deve deixar essa diferença explícita.
+O runtime 0.2 executa mods Lua e DLL locais. Use docs/MOD-API.md e os exemplos em modkit/examples/forgeloader. A negociação no lobby, simulação compartilhada e acesso Lua genérico aos objetos Unreal continuam em desenvolvimento. Uma integração nova precisa de implementação e teste; não basta escrever chamadas com nomes inventados. Peça à IA um pacote .flmod para instalar pelo loader.
 
 Formato de skills e descoberta no Codex: [documentação oficial](https://learn.chatgpt.com/docs/build-skills). Instruções de projeto: [AGENTS.md](https://learn.chatgpt.com/docs/agent-configuration/agents-md).

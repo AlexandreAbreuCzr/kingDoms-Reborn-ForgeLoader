@@ -7,9 +7,10 @@ Os caminhos abaixo são relativos à raiz do Dev Kit identificada para a tarefa.
 ```powershell
 python modkit/krmodkit.py new autor.nome --name 'Nome do mod' --output MeusMods/autor.nome
 python modkit/krmodkit.py validate MeusMods
+python modkit/krmodkit.py pack MeusMods/autor.nome --output Pacotes/autor.nome.flmod
 ```
 
-Acrescente `--required` para alterações de regras ou simulação. O gerador recusa um destino existente; para editar um mod, leia seus arquivos e preserve as alterações do autor.
+Acrescente `--required` para alterações de regras ou simulação. O runtime 0.2 recusa esses mods enquanto não houver handshake. O gerador recusa um destino existente; para editar um mod, leia seus arquivos e preserve as alterações do autor. Instale o `.flmod` pelo seletor do ForgeLoader e reinicie; ou copie a pasta para `Mods/autor.nome` na raiz do jogo.
 
 ## Contrato atual
 
@@ -19,7 +20,7 @@ Acrescente `--required` para alterações de regras ou simulação. O gerador re
 | `id` | Letras minúsculas, dígitos e `_`, com namespace como `autor.nome`; `core.` é reservado |
 | `version` | `X.Y.Z` |
 | `api_major` | Major aceito pelo código atual do kit |
-| `runtime` | `ue4ss-lua` ou `ue4ss-native` |
+| `runtime` | `forgeloader-lua` ou `forgeloader-native` no runtime integrado; UE4SS legado apenas no validador offline |
 | `entrypoint` | Arquivo existente dentro da pasta do mod, caminho relativo com `/` |
 | `game_builds` | Lista explícita de hashes SHA-256 suportados |
 | `multiplayer` | `local` ou `required` |
@@ -31,11 +32,11 @@ O validador também detecta ciclos e IDs duplicados. Um módulo obrigatório nã
 
 ## Scripts e APIs
 
-`modkit/examples/lua/kr_hello/Scripts/main.lua` demonstra a entrada de um script. `kr_observer` usa `RegisterHook` e `FindFirstOf` documentados pelo UE4SS. Isso não confirma sua execução neste build do jogo.
+`modkit/examples/forgeloader/forge.hello` e `forge.fps_limit` usam a API integrada. Leia `docs/MOD-API.md` e a implementação `native/loader/loader.cpp` antes de escolher funções. `forge.log`, `set_window_title`, `set_fps_limit`, `get_fps_limit`, `on`, `config` e `version` são os pontos de entrada desta versão.
 
-Antes de usar uma função nova, encontre sua definição no adaptador ou na documentação primária da dependência fixada. Para `RegisterHook`, a `UFunction` precisa existir em memória no momento do registro. Um evento não refletido pode exigir outro ponto de entrada nativo. Não invente um namespace `ForgeLoader.*` quando ele não existir no código.
+Cada mod Lua usa estado separado e callbacks na thread do jogo. Use `forge.log` para mensagens; `print`, `io`, `os`, `package`, `debug` e carregamento dinâmico de fontes não são disponibilizados. Não prometa uma sandbox para código hostil: chamadas C não são preemptadas pelo orçamento de instruções.
 
-Fontes: [RegisterHook](https://docs.ue4ss.com/lua-api/global-functions/registerhook.html), [FindFirstOf](https://docs.ue4ss.com/lua-api/global-functions/findfirstof.html).
+Os projetos antigos em `modkit/examples/lua` usam APIs UE4SS (`RegisterHook`, `FindFirstOf`); elas não existem no runtime ForgeLoader. Porte o projeto ou implemente o adaptador necessário; não copie essas chamadas para um mod apresentado como executável.
 
 ## Perfis offline
 

@@ -9,10 +9,10 @@ import json
 from pathlib import Path, PurePosixPath
 import re
 
-VERSION = '0.1.1-alpha'
+VERSION = '0.2.0-alpha'
 API_MAJOR = 1
 GAME_SHA = 'a5d2385660d9e819d2aa073cdd9c1d74c05149c9617f37cbb8b31e83708c4e24'
-PORTRAITS_SHA = '3664b38d0c53d03bdc5b90d7f04748a64f7234fb0c9ae9cc547940c865b8a3a1'
+PORTRAITS_SHA = '51ca84fbfd4918547a7a974a14095906548e5e7d1e170dcace2dfe26802de547'
 ID = re.compile(r'^[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+$')
 SEMVER = re.compile(r'^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$')
 HASH = re.compile(r'^[0-9a-f]{64}$')
@@ -77,7 +77,7 @@ def validate_manifest(manifest, folder):
         raise ModError(f'{ident}: enabled deve ser booleano')
     if manifest.get('multiplayer') not in ('local', 'required'):
         raise ModError(f'{ident}: multiplayer deve ser local ou required')
-    if manifest.get('runtime') not in ('ue4ss-lua', 'ue4ss-native'):
+    if manifest.get('runtime') not in ('forgeloader-lua', 'forgeloader-native', 'ue4ss-lua', 'ue4ss-native'):
         raise ModError(f'{ident}: runtime nao reconhecido')
     builds = manifest.get('game_builds')
     if not isinstance(builds, list) or not builds or not all(isinstance(x, str) and HASH.fullmatch(x) for x in builds):
@@ -156,10 +156,10 @@ def load_order(mods):
 
 def make_profile(exe, mods_folder):
     if digest(exe) != GAME_SHA:
-        raise ModError('Build sem adaptador confirmado: este prototipo aceita somente o EXE de retratos v3')
+        raise ModError('Build sem adaptador confirmado: este loader aceita somente o EXE identificado em profiles/player-patch.json')
     photo_dll = exe.parent / 'KingdomsPortraits.dll'
     if not photo_dll.is_file() or digest(photo_dll) != PORTRAITS_SHA:
-        raise ModError('Modulo padrao de retratos v3 ausente ou diferente')
+        raise ModError('Runtime ForgeLoader ausente ou diferente do build validado')
     mods = discover(mods_folder)
     ordered = load_order(mods)
     for ident, mod in mods.items():
@@ -172,7 +172,7 @@ def make_profile(exe, mods_folder):
         row = {key: mod[key] for key in ('id', 'version', 'package_sha256')}
         (shared if mod['multiplayer'] == 'required' else local).append(row)
     return {'schema': 1, 'tool_version': VERSION, 'api_major': API_MAJOR,
-            'adapter': 'kr-0.253-win64-portraits-v3', 'game_sha256': GAME_SHA,
+            'adapter': 'kr-0.253-win64-forgeloader-0.2', 'game_sha256': GAME_SHA,
             'shared_mods': sorted(shared, key=lambda x: x['id']), 'local_mods': local,
             'load_order': ordered, 'mode': 'offline-profile', 'runtime_handshake_implemented': False}
 
@@ -230,12 +230,12 @@ def new_mod(folder, ident, name, required=False):
     if folder.exists():
         raise ModError('Destino ja existe; arquivos preservados')
     manifest = {'schema': 1, 'id': ident, 'name': name, 'version': '0.1.0', 'api_major': API_MAJOR,
-                'runtime': 'ue4ss-lua', 'entrypoint': 'Scripts/main.lua', 'game_builds': [GAME_SHA],
+                'runtime': 'forgeloader-lua', 'entrypoint': 'Scripts/main.lua', 'game_builds': [GAME_SHA],
                 'multiplayer': 'required' if required else 'local', 'enabled': True,
                 'requires': {'core.shared_portraits': '3.0.0'}, 'conflicts': [], 'settings': {}}
     (folder / 'Scripts').mkdir(parents=True)
     (folder / 'mod.json').write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
-    (folder / 'Scripts/main.lua').write_text(f'-- Requires a compatible UE4SS runtime; ModKit does not load this yet.\nprint("[{ident}] Lua mod initialized\\n")\n', encoding='utf-8')
+    (folder / 'Scripts/main.lua').write_text(f'-- ForgeLoader API 1. Local mods execute on the game thread.\nforge.log("{ident} inicializado")\n', encoding='utf-8')
     return manifest
 
 
@@ -244,6 +244,7 @@ def main():
     sub = parser.add_subparsers(dest='command', required=True)
     new = sub.add_parser('new'); new.add_argument('id'); new.add_argument('--name', required=True); new.add_argument('--output', type=Path, required=True); new.add_argument('--required', action='store_true')
     check = sub.add_parser('validate'); check.add_argument('mods', type=Path)
+    pack = sub.add_parser('pack'); pack.add_argument('mod', type=Path); pack.add_argument('--output', type=Path, required=True)
     lock = sub.add_parser('profile'); lock.add_argument('--game-exe', type=Path, required=True); lock.add_argument('--mods', type=Path, required=True); lock.add_argument('--output', type=Path, required=True)
     compare = sub.add_parser('compare'); compare.add_argument('host', type=Path); compare.add_argument('peer', type=Path)
     args = parser.parse_args()
@@ -253,6 +254,19 @@ def main():
         elif args.command == 'validate':
             mods = discover(args.mods)
             result = {'valid': True, 'load_order': load_order(mods), 'runtime_loaded': False}
+        elif args.command == 'pack':
+            import zipfile
+            manifest = validate_manifest(read_json(args.mod / 'mod.json'), args.mod)
+            if manifest['runtime'] not in ('forgeloader-lua', 'forgeloader-native') or manifest['multiplayer'] != 'local':
+                raise ModError('O runtime 0.2 carrega mods locais da API ForgeLoader; porte este projeto antes de empacotar')
+            package_hash(args.mod)  # Reject links and colliding names before creating the output.
+            if args.output.exists() or args.output.resolve().is_relative_to(args.mod.resolve()):
+                raise ModError('Escolha um arquivo novo fora da pasta do mod')
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            with zipfile.ZipFile(args.output, 'x', zipfile.ZIP_DEFLATED) as archive:
+                for path in sorted(args.mod.rglob('*')):
+                    if path.is_file(): archive.write(path, path.relative_to(args.mod).as_posix())
+            result = {'package': str(args.output), 'id': manifest['id'], 'sha256': digest(args.output)}
         elif args.command == 'profile':
             result = make_profile(args.game_exe, args.mods)
             if args.output.exists():

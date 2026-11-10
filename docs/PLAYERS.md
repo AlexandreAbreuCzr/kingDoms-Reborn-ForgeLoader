@@ -1,35 +1,39 @@
-# ForgeLoader — quero jogar
+# Instalar o ForgeLoader e seus mods
 
-Este pacote instala o **runtime de retratos v3** na sua cópia de Kingdoms Reborn. O carregador geral de mods Lua/C++ ainda está em desenvolvimento. Ele não inclui o jogo completo.
+1. Extraia **ForgeLoader-Players-0.2.0-alpha.zip**.
+2. Feche o jogo, abra **Instalar-ForgeLoader.cmd** e escolha a pasta que contém `PunCity`.
+3. Baixe um mod `.flmod`, ou use os arquivos na pasta **mods-exemplo** do pacote.
+4. Abra o jogo e clique em **Instalar mod**, no painel superior direito. Selecione o `.flmod`.
+5. Reinicie o jogo. **Meus mods** mostra os mods carregados e os erros.
 
-## Instalar
+Se preferir instalar com o jogo fechado, abra **ForgeLoader/Instalar-Mod.cmd** dentro da pasta do jogo. O instalador abre um seletor de arquivos. A versão antiga 0.1 não carrega mods: atualize o pacote para jogadores primeiro. Não precisa do Dev Kit, Python ou Lua instalado.
 
-1. Extraia todo o ZIP para uma pasta.
-2. Feche o jogo e dê dois cliques em **Instalar-ForgeLoader.cmd**.
-3. Escolha a pasta do Kingdoms Reborn que contém `KingdomsReborn.exe` e `PunCity`.
-4. Aguarde a mensagem de conclusão e abra o jogo normalmente.
+## Pasta dos mods
 
-O instalador confere a versão antes de alterar arquivos e guarda backup em `ForgeLoader/Backups`, dentro da pasta do jogo. Não precisa instalar Python, compilador ou Dev Kit para jogar. Uma versão diferente ou DLL desconhecida é recusada.
+Um mod descompactado tem esta estrutura:
 
-## Colocar uma foto
+```text
+Kingdoms Reborn/
+  Mods/
+    autor.meumod/
+      mod.json
+      Scripts/main.lua
+```
 
-No lobby, abra **Configurações do Líder**. Use **Importar foto** no canto inferior esquerdo e escolha PNG/JPG. Confirme e finalize a configuração do líder. **Remover foto** solicita a volta ao retrato anterior.
+Você pode copiar essa pasta manualmente. Um `.flmod` é um ZIP com `mod.json` na raiz; instale pelo seletor ou extraia em uma pasta própria. Não coloque o ZIP inteiro ou uma pasta dentro de outra pasta do mesmo mod. Mods `.jar` de Minecraft e projetos de UE4SS não usam a API deste loader.
 
-Você importa a foto uma vez. O código foi feito para transmiti-la pela partida; os demais jogadores precisam do mesmo runtime, sem baixar ou importar a imagem manualmente. A recepção entre dois PCs ainda aguarda validação. A foto é recortada ao centro para 128 × 128 pixels e até 8 KiB.
+Para atualizar um mod, feche o jogo e mova sua pasta antiga para fora de Mods antes de instalar a nova. O instalador preserva pastas existentes. Para desativar/remover, feche o jogo e mova a pasta do mod para fora de Mods. Alterações são lidas ao iniciar.
 
-O painel usa uma janela nativa pertencente ao jogo. Prefira modo janela ou janela sem bordas. Tela cheia exclusiva ainda não foi validada.
+**Exemplos:** forge.hello altera o título da janela; forge.fps_limit aplica limite de 60 FPS na sessão; forge.native_hello escreve uma mensagem pelo módulo C++. No FPS, edite `settings.fps` do `mod.json` com o jogo fechado (0 = sem limite, ou 15–240). Nenhum deles altera regras da partida.
 
-## Restaurar
+## Fotos
 
-Feche o jogo, abra **Restaurar-Backup.cmd** e escolha a mesma pasta. Ele restaura o estado anterior à instalação, incluindo `PlayerInfo.dat`, e preserva uma cópia do estado atual antes de restaurar. Saves de cidades não são alterados. Mantenha saves criados durante testes separados de suas partidas normais.
+No lobby, abra **Configurações do Líder**, use **Importar foto**, escolha PNG/JPG, confirme e finalize. **Remover foto** restaura o retrato. A imagem é recortada para 128 × 128 e até 8 KiB. O código envia a foto pela partida; cada participante precisa do runtime compatível, sem copiar a imagem manualmente. A recepção entre PCs ainda precisa de validação real.
 
-Se você instalou uma versão antiga manualmente, use o backup que guardou naquela instalação. O instalador só restaura backups criados por ele e recusa arquivos alterados depois.
+Use janela ou janela sem bordas para os painéis nativos. Tela cheia exclusiva não foi validada.
 
-## O que este alpha oferece
+## Backup e diagnóstico
 
-- Inicialização e importação local de fotos executadas no PC de referência.
-- Backup, validação de versão e restauração do instalador testados em cópias temporárias.
-- Nenhum carregamento automático de arquivos da pasta `Mods` nesta versão.
-- Nenhum ganho de FPS medido ou correção confirmada para a GTX 1080.
+O instalador verifica o build e preserva backup em `ForgeLoader/Backups`. Com o jogo fechado, **Restaurar-Backup.cmd** restaura o estado anterior à última instalação e o perfil de retrato, preservando uma cópia do estado atual. Saves de cidades não são alterados. Ele não remove suas pastas de mods.
 
-Estado completo em `STATUS.md`. Relate falhas pela página Issues, informando a versão e o que aconteceu; não é necessário enviar saves ou dumps completos para um relato inicial.
+**Meus mods** mostra erros. O relatório fica em `%LOCALAPPDATA%\PunCity\Saved\ForgeLoader\mods-status.json` e o log em `runtime.log` na mesma pasta. Mods locais são suportados; mods de simulação `required` são recusados até existir negociação multiplayer. Não há ganho de FPS medido ou correção confirmada para GTX 1080.

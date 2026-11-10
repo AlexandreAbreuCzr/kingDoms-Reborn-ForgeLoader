@@ -6,7 +6,7 @@ Antes de escolher uma integração, confira `release.json`, `modkit/STATUS.json`
 
 - Projetos de exemplo do usuário ficam normalmente em `MeusMods/autor.nome`; preserve destinos que ele indicar.
 - `modkit/krmodkit.py` define o manifesto aceito, dependências e comparação offline. Prefira o gerador existente para criar a estrutura.
-- `native/portraits/` contém o runtime nativo atual, específico do build identificado. Os exemplos Lua/C++ usam o UE4SS como candidato; execução deles no jogo não está validada.
+- `native/loader/` contém Lua e a ABI C; `native/portraits/` integra ao build do jogo. Use `docs/MOD-API.md` e os exemplos executáveis em `modkit/examples/forgeloader` e `native/forge_native`. Os exemplos UE4SS antigos exigem portabilidade.
 - Mods que alteram simulação devem declarar `multiplayer: required`. Fotos pessoais não entram no fingerprint de código. O comparador offline não é negociação no lobby nem anticheat.
 - Use testes proporcionais à alteração. Para testar patch/instalação, use cópias temporárias; os testes que precisam do jogo original aceitam `KINGDOMS_ORIGINAL_EXE` e podem ser pulados quando o fixture não existe.
 - Relate separadamente estrutura criada, validação offline, compilação, execução local no jogo e teste entre clientes. Não transforme um teste de uma dessas camadas em confirmação das outras.

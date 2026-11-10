@@ -5,17 +5,20 @@
       "id": "core.shared_portraits",
       "version": "3.0.0",
       "default_enabled": true,
-      "implementation": "Existing KingdomsPortraits.dll v3; not yet a separate framework plugin",
+      "implementation": "Portrait protocol 3 integrated in ForgeLoader 0.2 native runtime; not a separate plugin",
       "multiplayer": "required",
       "transport": "KRPM1 through existing player-info RPC; remote reception unverified",
-      "jpeg_dimensions": [128, 128],
+      "jpeg_dimensions": [
+        128,
+        128
+      ],
       "max_jpeg_bytes": 8192,
       "photos_in_mod_fingerprint": false
     },
     {
       "id": "core.performance",
-      "default_enabled": true,
-      "default_behavior": "Diagnostics and measurements only; runtime module not yet implemented",
+      "default_enabled": false,
+      "default_behavior": "Dedicated performance diagnostics module pending; optional forge.fps_limit example available",
       "automatic_experimental_patches": false,
       "fps_improvement_measured": false
     }

@@ -1,8 +1,8 @@
 # Próximas etapas
 
-1. Validar um carregador de scripts em uma cópia controlada deste build, com versão fixada e reversão.
+1. Ampliar a API Lua inicial, hoje integrada e validada pelos exemplos locais da versão 0.2.
 2. Separar retratos e diagnóstico em módulos com ciclo de vida e propriedade central dos hooks.
-3. Executar os exemplos Lua/C++ no jogo e documentar uma API por sistema.
+3. Ampliar os exemplos Lua/C++ para novos sistemas do jogo e documentar cada integração.
 4. Integrar negociação de versões/dependências ao lobby antes de iniciar a simulação.
 5. Validar fotos em dois clientes, entrada tardia, reconexão e saves.
 6. Medir desempenho no mesmo save/câmera e publicar somente ganhos reproduzíveis.
