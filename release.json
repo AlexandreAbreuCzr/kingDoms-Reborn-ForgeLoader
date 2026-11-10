@@ -1,0 +1,14 @@
+{
+  "name": "ForgeLoader",
+  "version": "0.1.0-alpha",
+  "tag": "v0.1.0-alpha",
+  "repository": "AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader",
+  "player_archive": "ForgeLoader-Players-0.1.0-alpha.zip",
+  "devkit_archive": "ForgeLoader-DevKit-0.1.0-alpha.zip",
+  "runtime_version": 3,
+  "general_mod_loader": false,
+  "lua_runtime_integrated": false,
+  "multiplayer_photo_reception_verified": false,
+  "fps_improvement_measured": false,
+  "minhook_commit": "c3fcafdc10146beb5919319d0683e44e3c30d537"
+}

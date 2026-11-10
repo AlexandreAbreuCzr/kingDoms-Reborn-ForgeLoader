@@ -1,0 +1,59 @@
+{
+  "repository": "https://github.com/morluto/rea",
+  "commit": "d4a7c20e04024dced5e5d2d70e6b250cbd56f364",
+  "package": {
+    "name": "rea-agents",
+    "version": "6.8.0",
+    "source": "https://registry.npmjs.org/rea-agents/6.8.0",
+    "runtime": "Node.js 24.22.1 (existing local runtime)",
+    "installation": "project-local; no global MCP registration"
+  },
+  "submodules": [
+    {
+      "path": "third_party/binwalk",
+      "commit": "4fdab3d464d97b68e0af9088df3f9e2e1545b21c",
+      "checkout": "full"
+    },
+    {
+      "path": "third_party/ghidra-nativeaot",
+      "commit": "effeb734fc570c32650f88b159608979dc7b423e",
+      "checkout": "full"
+    },
+    {
+      "path": "third_party/jadx-headless-mcp",
+      "commit": "5844800a486d2248fa949b74c9896285f5b54de2",
+      "checkout": "full"
+    },
+    {
+      "path": "third_party/unblob",
+      "commit": "1fcc7a0a584a70a96c31f5a276c20944d199a089",
+      "checkout": "sparse: excludes tests/ (Windows-incompatible fixture filenames)"
+    },
+    {
+      "path": "third_party/wakaru",
+      "commit": "8219bf5016a063d7fb215101a8c45d5959ec733f",
+      "checkout": "full"
+    }
+  ],
+  "operation": "inspect-desktop-application",
+  "evidence_id": "ev_b37f0c38f201c68e25efee8230d54f35c7c433e1bfb27f4da11ebbe7904fdd17",
+  "coverage": {
+    "status": "complete-within-scan",
+    "entries_examined": 132,
+    "files_probed": 40,
+    "bytes_read": 13584,
+    "symlinks_not_followed": 0,
+    "special_entries_omitted": 0,
+    "limits": {
+      "max_entries": 20000,
+      "max_probe_bytes": 8388608
+    }
+  },
+  "limitations": [
+    "Directory inventory does not establish runtime behavior.",
+    "Source checkout and released package share a version number but are not claimed to be identical builds.",
+    "Native decompilation providers not configured.",
+    "Submodule presence does not imply installation of every external tool or applicability to Unreal PE binaries."
+  ],
+  "stage": "v1-baseline"
+}

@@ -1,0 +1,33 @@
+{
+  "GameUserSettings.ini": {
+    "ScalabilityGroups": {
+      "sg.ResolutionQuality": "100.000000",
+      "sg.ViewDistanceQuality": "2",
+      "sg.AntiAliasingQuality": "2",
+      "sg.ShadowQuality": "1",
+      "sg.PostProcessQuality": "1",
+      "sg.TextureQuality": "2",
+      "sg.EffectsQuality": "1",
+      "sg.FoliageQuality": "1",
+      "sg.ShadingQuality": "2"
+    },
+    "/Script/Engine.GameUserSettings": {
+      "ResolutionSizeX": "1280",
+      "ResolutionSizeY": "720",
+      "LastUserConfirmedResolutionSizeX": "1280",
+      "LastUserConfirmedResolutionSizeY": "720",
+      "FullscreenMode": "2",
+      "LastConfirmedFullscreenMode": "2",
+      "PreferredFullscreenMode": "2",
+      "bUseVSync": "True",
+      "FrameRateLimit": "45.000000",
+      "bUseHDRDisplayOutput": "False"
+    }
+  },
+  "Engine.ini": {
+    "SystemSettings": {
+      "t.MaxFPS": "45",
+      "r.Streaming.LimitPoolSizeToVRAM": "1"
+    }
+  }
+}

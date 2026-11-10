@@ -1,0 +1,16 @@
+{
+  "version": "0.1.0-alpha",
+  "stage": "offline development foundation",
+  "project_generator": "implemented and tested",
+  "manifest_dependency_validation": "implemented and tested",
+  "compatibility_profile_comparison": "implemented and tested offline",
+  "in_game_mod_loader": "not implemented",
+  "ue4ss_adapter": "candidate; not installed or validated",
+  "lua_examples": "manifest validation passed; game execution not tested",
+  "cpp_example": "source only; not compiled",
+  "runtime_api": "not implemented",
+  "lobby_handshake": "not implemented",
+  "portraits": "existing v3 native prototype; local import executed; cross-PC delivery unverified",
+  "optimization": "no FPS improvement measured; diagnostics-first module planned",
+  "supported_profile_game_sha256": "a5d2385660d9e819d2aa073cdd9c1d74c05149c9617f37cbb8b31e83708c4e24"
+}

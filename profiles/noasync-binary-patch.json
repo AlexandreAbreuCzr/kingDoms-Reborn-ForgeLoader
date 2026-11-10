@@ -1,0 +1,17 @@
+{
+  "id": "d3d11-noasync-v1",
+  "target_relative_path": "PunCity/Binaries/Win64/PrototypeCity-Win64-Shipping.exe",
+  "source_sha256": "8f2653ba07d53c3e01eb68a3f0a9a5851ef96e84d42181a5dd7a279740d0033c",
+  "patched_sha256": "e816bd65e1e1fbf9b8367c3dd1510bc3337fd7f6d538a2e3090c398f87da2462",
+  "size": 103551488,
+  "pdb_guid": "18355a00-5500-48db-a06f-cfffd22e4dda",
+  "pdb_age": 1,
+  "function": "D3D11RHI_ShouldAllowAsyncResourceCreation",
+  "virtual_address": "0x142f39c30",
+  "rva": "0x2f39c30",
+  "file_offset": 49517104,
+  "original_hex": "4883ec28",
+  "patched_hex": "33c0c390",
+  "meaning": "Return false at function entry (xor eax,eax; ret; nop), equivalent at this helper to selecting -nod3dasync. Does not suppress HRESULT errors or device-loss checks.",
+  "status": "Experimental compatibility mitigation; not a confirmed fix or a finding of a defective async implementation."
+}

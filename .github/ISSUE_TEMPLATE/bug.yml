@@ -1,0 +1,24 @@
+name: Relatar problema
+description: Falha na instalação, retratos ou ferramentas do Dev Kit
+body:
+  - type: dropdown
+    id: package
+    attributes:
+      label: Qual pacote?
+      options: [Jogadores, Dev Kit, Compilação do código]
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versão do ForgeLoader e do jogo
+      placeholder: 'ForgeLoader 0.1.0-alpha / Kingdoms Reborn 0.253'
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: O que aconteceu e como repetir?
+      description: Descreva o resultado esperado e o que apareceu. Não inclua contas, saves ou dumps completos.
+    validations:
+      required: true

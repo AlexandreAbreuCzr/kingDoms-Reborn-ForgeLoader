@@ -1,0 +1,32 @@
+name: Tests
+on:
+  push:
+    branches: [main, 'codex/**']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          submodules: false
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
+        with:
+          python-version: '3.12'
+      - name: Python and installer tests
+        run: python -m unittest discover -s tests -v
+      - name: Validate example manifests
+        run: python modkit/krmodkit.py validate modkit/examples/lua
+      - name: Build developer download
+        run: python scripts/build_releases.py --devkit-only
+      - name: Prepare pinned MinHook
+        shell: powershell
+        run: ./scripts/setup_native.ps1
+      - name: Compile native runtime and run native tests
+        shell: powershell
+        run: ./scripts/build_portraits.ps1

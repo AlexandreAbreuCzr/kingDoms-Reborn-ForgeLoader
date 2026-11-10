@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "modules": [
+    {
+      "id": "core.shared_portraits",
+      "version": "3.0.0",
+      "default_enabled": true,
+      "implementation": "Existing KingdomsPortraits.dll v3; not yet a separate framework plugin",
+      "multiplayer": "required",
+      "transport": "KRPM1 through existing player-info RPC; remote reception unverified",
+      "jpeg_dimensions": [128, 128],
+      "max_jpeg_bytes": 8192,
+      "photos_in_mod_fingerprint": false
+    },
+    {
+      "id": "core.performance",
+      "default_enabled": true,
+      "default_behavior": "Diagnostics and measurements only; runtime module not yet implemented",
+      "automatic_experimental_patches": false,
+      "fps_improvement_measured": false
+    }
+  ]
+}

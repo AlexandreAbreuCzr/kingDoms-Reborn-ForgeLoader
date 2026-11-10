@@ -1,0 +1,50 @@
+{
+  "stage": "v2",
+  "target_sha256": "8f2653ba07d53c3e01eb68a3f0a9a5851ef96e84d42181a5dd7a279740d0033c",
+  "symbol_identity": {
+    "pdb_guid": "18355a00-5500-48db-a06f-cfffd22e4dda",
+    "age": 1,
+    "matched_to_pe": true
+  },
+  "completed_static_tools": [
+    "DbgHelp local symbol queries",
+    "MSVC dumpbin 14.51.36248.0 disassembly",
+    "PE CodeView and PDB MSF identity parsing"
+  ],
+  "rea_package": "6.8.0",
+  "ghidra_version": "12.1.4",
+  "ghidra_distribution_sha256": "ddac49f903da9d5bac833e5cc79395098b9c33cfd3279be5f31bd00387d2d4db",
+  "rea_native_attempts": [
+    {
+      "startup_timeout_ms": 900000,
+      "disabled_analyzers": [
+        "WindowsResourceReference"
+      ],
+      "result": "provider_timeout",
+      "message": "Ghidra did not finish importing and analyzing the target within its configured 900000 ms startup deadline (REA_GHIDRA_STARTUP_TIMEOUT_MS). Ghidra's output for this operation is incomplete. No OutOfMemoryError was confirmed; a memory cause cannot be ruled out.",
+      "cleanup_tool_succeeded": true,
+      "completed_decompilation": false
+    },
+    {
+      "startup_timeout_ms": 300000,
+      "disabled_analyzers": [
+        "WindowsResourceReference",
+        "Non-Returning Functions - Discovered",
+        "Decompiler Switch Analysis"
+      ],
+      "result": "provider_timeout",
+      "message": "Ghidra did not finish importing and analyzing the target within its configured 300000 ms startup deadline (REA_GHIDRA_STARTUP_TIMEOUT_MS). Ghidra's output for this operation is incomplete. No OutOfMemoryError was confirmed; a memory cause cannot be ruled out.",
+      "cleanup_tool_succeeded": true,
+      "completed_decompilation": false
+    }
+  ],
+  "limitations": [
+    "No completed REA/Ghidra pseudocode in these attempts.",
+    "Manual reconstruction is derived from disassembly and matched symbols, not original source code.",
+    "No execution of patched game; no reproduction on affected GTX 1080."
+  ],
+  "tests": {
+    "unique_passed": 13,
+    "patch_test_scope": "Exact supplied executable copied to temporary directory; four-byte change and byte-exact restoration."
+  }
+}

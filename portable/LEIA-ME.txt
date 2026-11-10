@@ -1,0 +1,93 @@
+KINGDOMS REBORN - v2 / ANALISE BINARIA (GTX 1080 / WINDOWS 11)
+
+Este pacote prepara testes reversiveis para o erro de Direct3D
+0x887A0020 (DRIVER_INTERNAL_ERROR), antes do menu. Nao e uma correcao
+comprovada: ainda precisamos dos resultados do computador afetado.
+
+NOVIDADE v2 - O PERFIL ANTERIOR NAO RESOLVEU NO PC AFETADO
+O executavel e o PDB foram conferidos por GUID e revisao. A funcao
+D3D11RHI_ShouldAllowAsyncResourceCreation consulta -nod3dasync.
+Essa opcao atua na inicializacao D3D11 e difere de -norhithread.
+
+Proximo teste recomendado: com Steam aberto e jogo fechado, execute
+5-Testar-D3D11-Sem-Async.cmd. Ele passa -nod3dasync sem alterar o EXE.
+Registre se chegou ao menu e colete o diagnostico depois da tentativa.
+Os passos 2 e 3 abaixo foram mantidos para comparacao com o pacote v1.
+
+PATCH BINARIO OPCIONAL
+6-Aplicar-Patch-Binario-NoAsync.cmd altera QUATRO bytes da funcao acima
+para retornar false. Depois, abra o jogo normalmente. Ele produz o mesmo
+resultado nessa funcao que -nod3dasync; nao e um segundo mecanismo para
+usar se a opcao 5 ja foi comprovadamente aplicada e nao resolveu.
+Serve para tornar a selecao independente dos argumentos do iniciador.
+Nao ignora erros HRESULT, nao remove a tela de crash e nao corrige um
+dispositivo Direct3D que ja falhou. Pode reduzir o desempenho.
+
+O patch so aceita o SHA-256 exato do executavel analisado:
+8f2653ba07d53c3e01eb68a3f0a9a5851ef96e84d42181a5dd7a279740d0033c
+Qualquer outra versao sera recusada. O original e salvo e validado antes
+da alteracao. Preserve a pasta Dados. Para desfazer o patch, use
+7-Restaurar-Executavel-Original.cmd com o jogo fechado.
+Nenhum executavel do jogo foi incluido neste ZIP.
+
+1. Extraia o ZIP inteiro para uma pasta local, por exemplo Documentos.
+   Voce tambem pode colocar a pasta extraida junto ao KingdomsReborn.exe.
+   Nao execute os arquivos dentro do ZIP.
+2. Com o jogo fechado, rode 1-Coletar-Diagnostico.cmd.
+   Se a pasta nao for encontrada, cole o caminho que contem KingdomsReborn.exe.
+3. Abra o Steam normalmente. Rode 2-Iniciar-Estavel.cmd.
+   Aguarde o menu; teste 3 aberturas e depois uma partida por 15 minutos.
+   Deixe a janela do diagnostico aberta ate encerrar o jogo.
+4. Se ainda ocorrer o MESMO erro de Direct3D, feche o jogo e experimente
+   3-Testar-Compatibilidade.cmd. Mude so esse fator entre os testes.
+5. Rode 4-Restaurar-Configuracao.cmd para voltar ao estado anterior.
+   O jogo deve estar fechado. O estado mais recente tambem sera preservado.
+
+O perfil usa janela 1280x720, limite configurado de 45 FPS e qualidade
+grafica reduzida para diminuir a carga inicial. Isso nao e medicao de FPS.
+A opcao de compatibilidade acrescenta -norhithread, presente no binario
+analisado; a existencia da opcao nao comprova que resolva esta falha.
+Ela pode reduzir o desempenho. O modo estavel nao acrescenta essa opcao.
+Nao forcamos DirectX 12 ou Vulkan: os shaders disponiveis nao foram validados.
+O erro fornecido ja ocorre em DirectX 11.
+
+Os modos de perfil alteram Engine.ini e GameUserSettings.ini do usuario
+atual, em LOCALAPPDATA\PunCity\Saved\Config\WindowsNoEditor.
+Somente os comandos 6 e 7 alteram o executavel, com verificacao e backup.
+Backups, diagnosticos e resumos de sessao ficam na subpasta Dados.
+Nao alteram saves, DLLs, drivers, registro, TDR ou seguranca
+do Windows. Nao executam atualizacoes ou downloads. Nao enviam arquivos.
+Coleta e iniciadores nao precisam de administrador, Python ou REA.
+O patch exige permissao de escrita na pasta do jogo. Nao solicita elevacao
+automaticamente. Se a escrita for recusada, use o teste 5 sem patch.
+
+Se o Windows bloquear scripts, nao desative a seguranca para executar.
+Use a configuracao manual descrita abaixo e informe a mensagem do bloqueio.
+
+CONFIGURACAO MANUAL (alternativa aos scripts)
+O equivalente ao novo teste e acrescentar -nod3dasync aos argumentos
+de inicializacao do jogo. Nao e a mesma opcao que -norhithread.
+Faca uma copia dos dois arquivos INI antes de editar. Com o jogo fechado,
+em GameUserSettings.ini, secao [/Script/Engine.GameUserSettings], ajuste:
+ResolutionSizeX=1280
+ResolutionSizeY=720
+FullscreenMode=2
+PreferredFullscreenMode=2
+FrameRateLimit=45.000000
+bUseVSync=True
+Na secao [ScalabilityGroups], reduza sg.TextureQuality para 2 e
+sg.EffectsQuality, sg.FoliageQuality e sg.ShadowQuality para 1.
+Em Engine.ini, na secao [SystemSettings], ajuste:
+t.MaxFPS=45
+r.Streaming.LimitPoolSizeToVRAM=1
+Preserve todas as demais secoes e linhas. Para desfazer, recoloque as copias.
+
+DEVOLVER PARA ANALISE
+Compartilhe o diagnostico ZIP produzido em Dados e diga qual modo foi usado,
+se chegou ao menu e em quanto tempo ocorreu a falha. Arquivos podem conter
+caminhos do usuario e identificadores do Windows; revise antes de enviar.
+O diagnostico coleta GPU, driver, Windows, CPU, memoria, disco, configuracao,
+hash dos executaveis, ate 10 contextos de crash e eventos graficos recentes.
+Nao inclui saves, dumps completos ou uma copia do jogo. Os resumos de
+sessao podem conter argumentos de inicializacao do processo do jogo.
+O programa nao consegue confirmar visualmente se o menu ficou utilizavel.
