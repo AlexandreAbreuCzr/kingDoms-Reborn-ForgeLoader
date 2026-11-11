@@ -1,48 +1,28 @@
-# ForgeLoader para Kingdoms Reborn
+# ForgeLoader para Kingdoms Reborn 0.214
 
-Instale mods Lua e C++ no Kingdoms Reborn. A versão **0.2.0-alpha** inclui o carregador, o importador de fotos e exemplos que executam dentro do jogo.
+Este ramo mantém o port **0.2.1-KR214** para o build antigo. O pacote [0.2.0-alpha para 0.253](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/tag/v0.2.0-alpha) é separado.
 
-## Downloads
+- [Instalador para jogadores KR214](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.1-KR214/ForgeLoader-Players-0.2.1-KR214.zip)
+- [Perfil leve GTX 1080 (.flmod)](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.1-KR214/forge.kr214_performance-1.0.0.flmod)
+- [Dev Kit KR214](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.1-KR214/ForgeLoader-DevKit-0.2.1-KR214.zip)
 
-| Quero | Arquivo |
-| --- | --- |
-| Instalar o ForgeLoader no jogo | [ForgeLoader para jogadores](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.0-alpha/ForgeLoader-Players-0.2.0-alpha.zip) |
-| Criar mods, inclusive com IA | [Dev Kit](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.0-alpha/ForgeLoader-DevKit-0.2.0-alpha.zip) |
-| Testar meu primeiro mod | [Título da janela](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.0-alpha/forge.hello-1.0.0.flmod) |
-| Limitar o consumo de GPU | [Limite de 60 FPS](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.0-alpha/forge.fps_limit-1.0.0.flmod) |
-| Estudar um mod nativo compilado | [Exemplo C++](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.0-alpha/forge.native_hello-1.0.0.flmod) |
+Extraia o instalador, feche o jogo e abra `Instalar-ForgeLoader.cmd`. Selecione a pasta do **0.214**. Depois use **Instalar mod**, na janela do jogo, ou `ForgeLoader/Instalar-Mod.cmd`. Selecione o `.flmod`, reinicie e confira **Meus mods**.
 
-## Instalar e usar
+O instalador inclui o reparador de saves e o perfil leve opcional. O mod `yongs.rejoin_fix` usa o arquivo original do autor; se já estiver na pasta `Mods`, não precisa reinstalá-lo. [Instalação, reparo e limites](docs/KR214.md) · [API](docs/MOD-API.md) · [Criar com IA](CRIAR-MOD-COM-IA.md).
 
-1. Extraia o pacote para jogadores, feche o jogo e abra **Instalar-ForgeLoader.cmd**. Escolha a pasta do jogo.
-2. Baixe um mod `.flmod`. Abra **Instalar mod** dentro do jogo ou **ForgeLoader/Instalar-Mod.cmd** na pasta do jogo e selecione o arquivo.
-3. Reinicie o jogo e use **Meus mods** para conferir o resultado. O mod de exemplo muda o título da janela.
+## Validação
 
-Você também pode copiar a pasta descompactada para `Mods/autor.nome/`, com `mod.json` diretamente dentro dela. `.flmod` é um ZIP, não um JAR. Não copie apenas o arquivo `.flmod` para Mods: use o instalador ou extraia sua pasta.
+No PC de desenvolvimento, a instalação 0.214 abriu com `yongs.rejoin_fix` e o perfil leve carregados. O motor confirmou os limites gráficos, e o usuário confirmou que o seletor de `.flmod` abriu pelo botão. O reparador foi testado em cópias sintéticas e leu metadados antigos de referência sem alterá-los. Reconexão, recuperação de um save afetado e ganho de FPS no PC com GTX 1080 ainda precisam de teste.
 
-O download não inclui o jogo e não exige Python, Lua ou compilador para jogar. Há backup e restauração. O pacote para jogadores já traz dois mods de exemplo para instalar opcionalmente.
+O build usa o EXE exato e preserva as seções originais do jogo. Consulte `profiles/player-patch.json` para identidade do binário. A distribuição não inclui o jogo nem a DLL do mod de terceiros.
 
-## Recursos e limites
-
-- Runtime Lua 5.4.9 integrado, módulos DLL x64 com ABI C e callbacks na thread do jogo.
-- Verificação de build/API, dependências, versões, ciclos e conflitos; relatório de erros por mod.
-- API inicial para logs, título, limite de FPS e eventos. [API e formato dos pacotes](docs/MOD-API.md).
-- Importador PNG/JPG em **Configurações do Líder**, preservando o protótipo de fotos compartilhadas.
-
-Os três exemplos foram executados no jogo local. O carregador ainda aceita **mods locais**; a negociação no lobby e mods de simulação compartilhada estão em desenvolvimento. A recepção das fotos em outro PC ainda não foi validada. Não há ganho de FPS medido nem correção confirmada para o crash da GTX 1080. O limite de FPS reduz a taxa máxima; não aumenta o desempenho do computador.
-
-Este adaptador aceita o build 0.253 identificado pelo hash em `profiles/player-patch.json`. Outros builds precisam de adaptação. Mods de UE4SS e de outros jogos não são carregados automaticamente.
-
-[Guia para jogadores](docs/PLAYERS.md) · [Criar mods](docs/DEVELOPMENT.md) · [Criar com IA](CRIAR-MOD-COM-IA.md) · [Estado](docs/STATUS.md) · [Validação desta versão](docs/VALIDATION-0.2.0.md) · [Todas as versões](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases)
-
-## Código e desenvolvimento
-
-`native/loader` contém o loader e a ABI; `native/portraits` contém o adaptador do jogo e as fotos; `modkit` contém gerador, empacotador e exemplos; `installer` contém os instaladores. `tools/rea` mantém REA e seus submódulos fixados. Binários, fotos, saves, backups e diagnósticos pessoais ficam fora do Git.
+## Desenvolver
 
 ```powershell
 python -m unittest discover -s tests -v
 powershell -NoProfile -File scripts/setup_native.ps1
 powershell -NoProfile -File scripts/build_portraits.ps1
+python scripts/build_releases.py --devkit-only
 ```
 
-O CI compila Lua, loader, exemplo C++ e executa os testes nativos. Testes que precisam do jogo original são pulados quando o fixture não é fornecido. Não há execução do jogo no CI. [Contribuir](CONTRIBUTING.md).
+O build compila o runtime e os mods nativos. [Guia do Dev Kit](docs/DEVELOPMENT.md). REA e os submódulos continuam fixados em `tools/rea`. Não inclua binários do jogo, saves, fotos ou logs privados no Git.

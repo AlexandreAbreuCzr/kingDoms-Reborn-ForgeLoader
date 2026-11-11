@@ -6,15 +6,12 @@ import struct
 import unittest
 import tempfile
 from unittest.mock import patch
-import json
 import contextlib
 import io
 import os
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = Path.home() / 'Downloads/Kingdoms Reborn/PunCity/Binaries/Win64/PrototypeCity-Win64-Shipping.exe'
-if (ROOT / '.local/original-image/PrototypeCity-Win64-Shipping.exe').exists():
-    SOURCE = ROOT / '.local/original-image/PrototypeCity-Win64-Shipping.exe'
+SOURCE = ROOT / '.local/kr214-input/PrototypeCity-Win64-Shipping.exe'
 if os.environ.get('KINGDOMS_ORIGINAL_EXE'): SOURCE = Path(os.environ['KINGDOMS_ORIGINAL_EXE'])
 spec = importlib.util.spec_from_file_location('portrait_builder', ROOT / 'scripts/build_portrait_exe.py')
 builder = importlib.util.module_from_spec(spec)
@@ -46,34 +43,28 @@ def parse(raw):
     return sections, imports, offset
 
 
-@unittest.skipUnless(SOURCE.exists() and hashlib.sha256(SOURCE.read_bytes()).hexdigest() == '8f2653ba07d53c3e01eb68a3f0a9a5851ef96e84d42181a5dd7a279740d0033c', 'Exact original game fixture required')
+@unittest.skipUnless(SOURCE.exists() and hashlib.sha256(SOURCE.read_bytes()).hexdigest() == '29dd825cb3da3e79485fed017bf5c219af81b72dc01c0a351a2764b12e8134c2', 'Exact original game fixture required')
 class PortraitExecutableTests(unittest.TestCase):
     def test_shipped_portrait_build_keeps_original_graphics_policy(self):
         # Exercise build(), not just its PE helper: the v1 regression happened here.
         with tempfile.TemporaryDirectory() as folder:
             root = Path(folder)
             (root / 'profiles').mkdir()
-            (root / 'profiles/noasync-binary-patch.json').write_bytes((ROOT / 'profiles/noasync-binary-patch.json').read_bytes())
-            dll = root / '.local/portrait-build/KingdomsPortraits.dll'
-            dll.parent.mkdir(parents=True)
-            dll.write_bytes(b'fixture: builder copies DLL bytes without executing them')
+            (root / 'profiles/player-patch.json').write_bytes((ROOT / 'profiles/player-patch.json').read_bytes())
             with patch.object(builder, 'ROOT', root), contextlib.redirect_stdout(io.StringIO()):
                 target = builder.build(SOURCE)
             data = target.read_bytes()
             raw = SOURCE.read_bytes()
-            self.assertEqual(data[49517104:49517108], bytes.fromhex('4883ec28'))
             self.assertEqual(hashlib.sha256(data).hexdigest(),
-                             'a5d2385660d9e819d2aa073cdd9c1d74c05149c9617f37cbb8b31e83708c4e24')
+                             'c676d4ac5533464cc2bbfefd6321c9a119d0f264069ddf265668f22d945d3df4')
             for section in parse(raw)[0]:
                 at, length = section[4], section[3]
                 self.assertEqual(data[at:at + length], raw[at:at + length])
-            manifest = json.loads((target.parents[3] / 'manifest.json').read_text())
-            self.assertFalse(manifest['noasync_patch_applied'])
 
     def test_existing_code_and_imports_preserved(self):
         raw = SOURCE.read_bytes()
         self.assertEqual(hashlib.sha256(raw).hexdigest(),
-                         '8f2653ba07d53c3e01eb68a3f0a9a5851ef96e84d42181a5dd7a279740d0033c')
+                         '29dd825cb3da3e79485fed017bf5c219af81b72dc01c0a351a2764b12e8134c2')
         modified, meta = builder.add_runtime(raw)
         old, imports, _ = parse(raw)
         new, after, offset = parse(modified)

@@ -65,7 +65,7 @@ class ReleasePackageTests(unittest.TestCase):
         self.assertFalse(patch['noasync_patch_applied'])
         self.assertLess(len(patch['append_hex']), 16384)
         self.assertTrue(all(0 <= row['offset'] < 4096 for row in patch['changes']))
-        self.assertEqual(patch['target_sha256'], 'a5d2385660d9e819d2aa073cdd9c1d74c05149c9617f37cbb8b31e83708c4e24')
+        self.assertEqual(patch['target_sha256'], 'c676d4ac5533464cc2bbfefd6321c9a119d0f264069ddf265668f22d945d3df4')
 
 
 if __name__ == '__main__': unittest.main()

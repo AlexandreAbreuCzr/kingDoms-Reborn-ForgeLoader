@@ -10,7 +10,7 @@ static std::vector<std::string> logs;static std::string title;static float fps=0
 static void log(const char* s){logs.push_back(s);}static int setTitle(const char* s){title=s;return 1;}static int setFPS(float f){fps=f;return 1;}static float getFPS(){return fps;}
 static void check(bool value,const char* msg){if(!value)throw std::runtime_error(msg);}
 static void write(const fs::path& p,const std::string& s){fs::create_directories(p.parent_path());std::ofstream(p,std::ios::binary)<<s;}
-static json manifest(const std::string& id){return {{"schema",1},{"id",id},{"name",id},{"version","1.0.0"},{"api_major",1},{"runtime","forgeloader-lua"},{"multiplayer","local"},{"game_builds",{"a5d2385660d9e819d2aa073cdd9c1d74c05149c9617f37cbb8b31e83708c4e24"}},{"requires",json::object()},{"entrypoint","Scripts/main.lua"}};}
+static json manifest(const std::string& id){return {{"schema",1},{"id",id},{"name",id},{"version","1.0.0"},{"api_major",1},{"runtime","forgeloader-lua"},{"multiplayer","local"},{"game_builds",{"c676d4ac5533464cc2bbfefd6321c9a119d0f264069ddf265668f22d945d3df4"}},{"requires",json::object()},{"entrypoint","Scripts/main.lua"}};}
 int main(int argc,char** argv){
     fs::path root=fs::temp_directory_path()/("forge-loader-test-"+std::to_string(GetCurrentProcessId()));
     try{

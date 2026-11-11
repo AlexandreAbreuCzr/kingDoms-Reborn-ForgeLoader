@@ -88,9 +88,15 @@ function Invoke-Install($Layout,[string]$Saved) {
 function Install-ModTools($Layout) {
     [IO.Directory]::CreateDirectory((Join-Path $Layout.Root 'Mods'))|Out-Null
     [IO.Directory]::CreateDirectory($Layout.Data)|Out-Null
-    foreach($name in @('Install-Mod.ps1','Instalar-Mod.cmd')){
+    Write-Atomic (Join-Path $Layout.Data 'player-patch.json') ([IO.File]::ReadAllBytes((Join-Path $PSScriptRoot 'payload\player-patch.json')))
+    foreach($name in @('Install-Mod.ps1','Instalar-Mod.cmd','Reparar-Save.cmd')){
         $source=Join-Path $PSScriptRoot $name
         if(Test-Path -LiteralPath $source){Write-Atomic (Join-Path $Layout.Data $name) ([IO.File]::ReadAllBytes($source))}
+    }
+    $repair=Join-Path $PSScriptRoot 'Ferramentas\repair_save_players.py'
+    if(Test-Path -LiteralPath $repair){
+        $tools=Join-Path $Layout.Data 'Ferramentas';[IO.Directory]::CreateDirectory($tools)|Out-Null
+        Write-Atomic (Join-Path $tools 'repair_save_players.py') ([IO.File]::ReadAllBytes($repair))
     }
 }
 function Invoke-Restore($Layout,[string]$Saved) {

@@ -1,5 +1,11 @@
 # Histórico
 
+## 0.2.1-KR214 — 2026-11-10
+
+- Port 0.214, seletor de mods corrigido e suporte ao módulo de rejoin fornecido.
+- Perfil leve opcional e leitura das configurações aceitas pelo motor.
+- Reparador de saves com validação de doador e cópia verificável.
+
 ## 0.2.0-alpha — 2026-11-10
 
 - Loader Lua 5.4.9 e DLL x64 integrado ao jogo, com API 1 e callbacks na thread do jogo.

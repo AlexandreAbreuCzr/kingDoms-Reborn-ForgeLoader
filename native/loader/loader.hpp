@@ -4,9 +4,10 @@
 #include <string>
 #include "forgeloader_api.h"
 namespace forgeloader {
+struct NativeLoadHooks { void (*begin)()=nullptr; void (*finish)(bool)=nullptr; };
 class Loader {
 public:
-    Loader(std::filesystem::path mods, std::filesystem::path report, FLHostV1 host);
+    Loader(std::filesystem::path mods, std::filesystem::path report, FLHostV1 host, NativeLoadHooks hooks={});
     ~Loader();
     void load();
     void tick(double seconds, bool lobby=false);

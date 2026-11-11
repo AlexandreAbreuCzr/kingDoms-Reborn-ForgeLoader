@@ -1,17 +1,17 @@
 {
-  "version": "0.2.0-alpha",
+  "version": "0.2.1-KR214",
   "ai_modding_skill": "packaged project skill and provider-neutral instructions; no embedded AI model",
-  "stage": "local Lua/native mod loader",
+  "stage": "KR214 port of local Lua/native loader",
   "project_generator": "implemented and tested",
   "manifest_dependency_validation": "implemented and tested",
   "compatibility_profile_comparison": "implemented and tested offline",
-  "in_game_mod_loader": "implemented; three examples executed locally",
+  "in_game_mod_loader": "performance and yongs.rejoin_fix 1.2.0 loaded in local KR214 game",
   "ue4ss_adapter": "candidate; not installed or validated",
-  "lua_examples": "ForgeLoader examples executed in local game; legacy UE4SS examples require porting",
-  "cpp_example": "ForgeLoader native example compiled and executed locally",
-  "runtime_api": "implemented: logs, title, FPS limit, tick and lobby_tick; see docs/MOD-API.md",
+  "lua_examples": "validated manifest and headless Lua execution; original 0.253 examples executed in earlier release",
+  "cpp_example": "built; KR214 performance mod executed",
+  "runtime_api": "ABI 1 and optional KR214 exports for hook installation and graphics options",
   "lobby_handshake": "not implemented",
-  "portraits": "existing v3 native prototype; local import executed; cross-PC delivery unverified",
-  "optimization": "no FPS improvement measured; diagnostics-first module planned",
-  "supported_profile_game_sha256": "a5d2385660d9e819d2aa073cdd9c1d74c05149c9617f37cbb8b31e83708c4e24"
+  "portraits": "preserved KR214 port; sharing not revalidated",
+  "optimization": "session graphics profile executed and engine readback verified; GTX1080 gains unmeasured",
+  "supported_profile_game_sha256": "c676d4ac5533464cc2bbfefd6321c9a119d0f264069ddf265668f22d945d3df4"
 }

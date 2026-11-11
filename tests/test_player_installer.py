@@ -83,9 +83,9 @@ class PlayerInstallerTests(unittest.TestCase):
             self.assertEqual(dll.read_bytes(),old)
             self.assertEqual(exe.read_bytes(),target)
 
-    @unittest.skipUnless((ROOT / '.local/original-image/PrototypeCity-Win64-Shipping.exe').exists(), 'Local original game fixture required')
+    @unittest.skipUnless((ROOT / '.local/kr214-input/PrototypeCity-Win64-Shipping.exe').exists(), 'Local original game fixture required')
     def test_real_release_patch_and_dll_restore_original(self):
-        original = (ROOT / '.local/original-image/PrototypeCity-Win64-Shipping.exe').read_bytes()
+        original = (ROOT / '.local/kr214-input/PrototypeCity-Win64-Shipping.exe').read_bytes()
         dll_path = ROOT / '.local/portrait-build/KingdomsPortraits.dll'
         if not dll_path.exists(): self.skipTest('Validated runtime fixture required')
         with tempfile.TemporaryDirectory() as folder:
@@ -93,7 +93,7 @@ class PlayerInstallerTests(unittest.TestCase):
             shutil.copyfile(ROOT / 'profiles/player-patch.json', package / 'payload/player-patch.json')
             shutil.copyfile(dll_path, package / 'payload/KingdomsPortraits.dll')
             self.invoke(root, package, saved, 'Install')
-            self.assertEqual(hashlib.sha256(exe.read_bytes()).hexdigest(), 'a5d2385660d9e819d2aa073cdd9c1d74c05149c9617f37cbb8b31e83708c4e24')
+            self.assertEqual(hashlib.sha256(exe.read_bytes()).hexdigest(), 'c676d4ac5533464cc2bbfefd6321c9a119d0f264069ddf265668f22d945d3df4')
             self.invoke(root, package, saved, 'Restore')
             self.assertEqual(exe.read_bytes(), original)
 

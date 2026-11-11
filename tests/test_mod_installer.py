@@ -1,6 +1,7 @@
 """Install the real .flmod format with the player PowerShell entry point."""
 from pathlib import Path
 import json
+import hashlib
 import os
 import subprocess
 import tempfile
@@ -20,6 +21,8 @@ class ModInstallerTests(unittest.TestCase):
 
     def fixture(self, root, extra=None, **changes):
         game=root/'game'; dll=game/'PunCity/Binaries/Win64/KingdomsPortraits.dll';dll.parent.mkdir(parents=True, exist_ok=True);dll.write_bytes(b'fixture')
+        exe=dll.parent/'PrototypeCity-Win64-Shipping.exe';exe.write_bytes(b'MZ fixture')
+        (game/'ForgeLoader').mkdir();(game/'ForgeLoader/player-patch.json').write_text(json.dumps({'dll_sha256':hashlib.sha256(dll.read_bytes()).hexdigest(),'target_sha256':hashlib.sha256(exe.read_bytes()).hexdigest()}))
         example=ROOT/'modkit/examples/forgeloader/forge.hello'
         m=json.loads((example/'mod.json').read_text());m.update(changes)
         archive=root/'example.flmod'
@@ -46,5 +49,13 @@ class ModInstallerTests(unittest.TestCase):
                 self.run_installer(game,package,False)
                 self.assertFalse((game/'Mods/forge.hello').exists())
                 self.assertFalse((root/'outside.txt').exists())
+
+    def test_old_runtime_is_refused_instead_of_installing_to_wrong_folder(self):
+        with tempfile.TemporaryDirectory() as folder:
+            game,package=self.fixture(Path(folder))
+            (game/'PunCity/Binaries/Win64/KingdomsPortraits.dll').write_bytes(b'legacy runtime')
+            result=self.run_installer(game,package,False)
+            self.assertIn('nao corresponde',result.stderr)
+            self.assertFalse((game/'Mods').exists())
 
 if __name__ == '__main__':unittest.main()

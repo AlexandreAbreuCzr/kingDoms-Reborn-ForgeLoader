@@ -34,3 +34,7 @@ Esta versão executa somente `multiplayer: local`. Mods de simulação devem con
 Relatório: `%LOCALAPPDATA%\PunCity\Saved\ForgeLoader\mods-status.json`. Log: `runtime.log` na mesma pasta. O limite de FPS é de sessão, sem alteração permanente nos INIs, e não representa uma otimização medida.
 
 Dependências fixadas em `profiles/loader-dependencies.json`: [Lua 5.4](https://www.lua.org/manual/5.4/manual.html), [nlohmann/json 3.12.0](https://github.com/nlohmann/json/releases/tag/v3.12.0). Licenças em `third_party`.
+
+## Exports adicionais no KR214
+
+`ForgeLoader_GameBase()` fornece a base validada da imagem. `ForgeLoader_Hook(rva, detour, original)` funciona na inicialização nativa, apenas em seções executáveis do jogo. Retorna 0 no sucesso; hooks são removidos se a inicialização não for confirmada. `ForgeLoader_ClampVideo214` usa a interface em `native/loader/kr214_video_api.h` para limites gráficos predefinidos. Esses exports não são parte da ABI genérica de outros builds.

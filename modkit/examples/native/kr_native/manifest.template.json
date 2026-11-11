@@ -6,7 +6,7 @@
   "api_major": 1,
   "runtime": "ue4ss-native",
   "entrypoint": "dlls/main.dll",
-  "game_builds": ["a5d2385660d9e819d2aa073cdd9c1d74c05149c9617f37cbb8b31e83708c4e24"],
+  "game_builds": ["c676d4ac5533464cc2bbfefd6321c9a119d0f264069ddf265668f22d945d3df4"],
   "multiplayer": "required",
   "requires": {"core.shared_portraits": "3.0.0"},
   "conflicts": []

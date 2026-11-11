@@ -1,11 +1,12 @@
-# ForgeLoader 0.2.0-alpha
+# ForgeLoader 0.2.1-KR214
 
-Esta versão carrega mods Lua e DLL x64 no jogo. Atualize o pacote **ForgeLoader para jogadores**, instale um arquivo **.flmod** pelo botão **Instalar mod** ou por **ForgeLoader/Instalar-Mod.cmd**, e reinicie o jogo. **Meus mods** mostra os mods carregados e seus erros.
+Atualização para **Kingdoms Reborn 0.214**. Inclui o seletor de `.flmod` vinculado à janela do jogo, instalação verificada na pasta `Mods/`, perfil leve GTX 1080 opcional e reparador de saves com seleção explícita do doador. Atualiza os runtimes KR214 conhecidos com backup; o pacote para 0.253 é separado.
 
-Downloads separados: pacote para jogadores, Dev Kit e três exemplos `.flmod` (título, limite de FPS e DLL). O pacote para jogadores também inclui os dois exemplos Lua para instalação opcional. Não distribui o jogo nem exige Python/Lua no PC de quem joga.
+- **Jogar:** extraia o ZIP para jogadores, feche o jogo e execute `Instalar-ForgeLoader.cmd`.
+- **Desempenho:** instale `forge.kr214_performance-1.0.0.flmod` e reinicie. O perfil limita resolução 3D a 85%, reduz sombras e desativa efeitos gráficos selecionados.
+- **Rejoin:** mantenha o `yongs.rejoin_fix` original em `Mods/`; a DLL do amigo não está incluída nesta publicação.
+- **Saves:** abra `ForgeLoader/Reparar-Save.cmd` e escolha o save afetado e um anterior do mesmo mundo. A ferramenta requer Python 3.10+ e cria uma cópia, sem converter versões.
 
-Os três exemplos foram executados no jogo local. Foram verificados o título da janela, callback Lua, callback nativo e limite de FPS com leitura de confirmação do motor. 32 testes Python/PowerShell passaram, além dos testes nativos de protocolo, imagens e execução Lua/DLL.
+No teste local, o jogo abriu com o perfil e rejoin 1.2.0 carregados; o motor confirmou os valores gráficos. A abertura do seletor foi confirmada pelo usuário. Reparação em cópia e recusas de doadores incompatíveis foram testadas. Reconexão entre PCs e desempenho na GTX 1080 ainda não foram medidos.
 
-A captura automática da janela falhou; aparência e cliques do painel não foram validados automaticamente. O importador de fotos existente foi preservado. Negociação no lobby e mods de simulação compartilhada ainda não estão implementados; esta versão aceita mods locais. Recepção de fotos entre PCs, ganho de FPS e correção do crash da GTX 1080 não estão confirmados.
-
-O Dev Kit foi atualizado com a API implementada, gerador, empacotador e instruções para IA. Os exemplos antigos de UE4SS exigem portabilidade. Compatibilidade limitada ao build 0.253 identificado no perfil; há verificação de hash, backup, atualização do runtime v3 e restauração.
+O ZIP não inclui o jogo. Confira `KR214.md` e os hashes dos arquivos da publicação.

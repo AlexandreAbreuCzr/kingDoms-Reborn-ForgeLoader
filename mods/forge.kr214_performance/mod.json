@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "id": "forge.kr214_performance",
+  "name": "Perfil Leve GTX 1080 (KR214)",
+  "version": "1.0.0",
+  "api_major": 1,
+  "runtime": "forgeloader-native",
+  "entrypoint": "dlls/main.dll",
+  "game_builds": ["c676d4ac5533464cc2bbfefd6321c9a119d0f264069ddf265668f22d945d3df4"],
+  "multiplayer": "local",
+  "requires": {"core.loader": "0.2.1"},
+  "conflicts": ["forge.fps_limit"],
+  "enabled": true
+}

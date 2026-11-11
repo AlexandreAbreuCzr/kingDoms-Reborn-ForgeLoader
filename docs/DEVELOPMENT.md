@@ -1,6 +1,6 @@
 # Criar mods ForgeLoader
 
-O Dev Kit 0.2 inclui o gerador, o empacotador `.flmod`, exemplos Lua/C++ e fontes do loader e adaptador. O pacote para jogadores é separado e não requer Python.
+O Dev Kit KR214 inclui o gerador, o empacotador `.flmod`, exemplos Lua/C++ e fontes do loader e adaptador. O pacote para jogadores é separado e não requer Python.
 
 ## Primeiro mod
 
@@ -48,6 +48,6 @@ python scripts/build_releases.py --devkit-only
 python scripts/build_releases.py --runtime-dll .local/portrait-build/KingdomsPortraits.dll
 ```
 
-Downloads separados, exemplos `.flmod`, hashes e manifesto ficam em `dist/releases/v0.2.0-alpha`. O pacote para jogadores distribui a DLL própria e um patch de cabeçalhos PE aplicado à cópia original do usuário; não inclui o jogo.
+Downloads separados, exemplos `.flmod`, hashes e manifesto ficam em `dist/releases/v0.2.1-KR214`. O pacote para jogadores distribui a DLL própria e um patch de cabeçalhos PE aplicado à cópia original do usuário; não inclui o jogo.
 
 `tools/rea` mantém REA e seus cinco submódulos fixados. `scripts/initialize_rea.ps1` trata fixtures incompatíveis com NTFS. Não há projeto Unreal original neste repositório. [Estado](STATUS.md) e [API](MOD-API.md).

@@ -40,6 +40,8 @@ try {
     if($LASTEXITCODE -ne 0){throw 'Image tests failed'}
     & "$msvc\bin\Hostx64\x64\cl.exe" /nologo /LD /O2 /MT /EHsc /std:c++17 "$root\modkit\examples\native\forge_native\main.cpp" /link /Brepro /OUT:forge_native.dll
     if($LASTEXITCODE -ne 0){throw 'Native example build failed'}
+    & "$msvc\bin\Hostx64\x64\cl.exe" /nologo /LD /O2 /MT /EHsc /std:c++17 "$root\mods\forge.kr214_performance\main.cpp" /link /Brepro /OUT:forge_kr214_performance.dll
+    if($LASTEXITCODE -ne 0){throw 'KR214 performance mod build failed'}
     & "$msvc\bin\Hostx64\x64\cl.exe" /nologo /O2 /MT /EHsc /std:c++17 "/I$root\.local\loader-deps" "$root\native\loader\loader_test.cpp" loader.obj forge-lua.lib /Fe:loader_test.exe
     if($LASTEXITCODE -ne 0){throw 'Loader test compilation failed'}
     & .\loader_test.exe $root

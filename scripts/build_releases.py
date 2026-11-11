@@ -30,7 +30,7 @@ def archive(path, files):
 
 def devkit_files():
     files = {}
-    for folder in ('modkit', 'native/portraits', 'native/loader', '.agents/skills', 'third_party'):
+    for folder in ('modkit', 'mods', 'native/portraits', 'native/loader', '.agents/skills', 'third_party'):
         for path in (ROOT / folder).rglob('*'):
             if path.is_file() and '__pycache__' not in path.parts and (path.suffix in ('.py', '.json', '.md', '.cpp', '.h', '.hpp', '.lua', '.txt', '.yaml') or path.name == 'CMakeLists.txt'):
                 files[path.relative_to(ROOT).as_posix()] = path
@@ -38,7 +38,8 @@ def devkit_files():
                  'scripts/build_portrait_exe.py', 'scripts/build_portraits.ps1', 'scripts/setup_native.ps1',
                  'scripts/build_releases.py', 'scripts/build_modkit.py', 'scripts/prepare_player_patch.py',
                  'scripts/setup_loader.py', 'profiles/loader-dependencies.json', 'docs/MOD-API.md', 'docs/VALIDATION-0.2.0.md',
-                 'tests/test_modkit.py', 'tests/test_portrait_exe.py',
+                 'tests/test_modkit.py', 'tests/test_portrait_exe.py', 'tests/test_save_repair.py',
+                 'docs/KR214.md', 'tools/repair_save_players.py', 'installer/Reparar-Save.cmd',
                  'docs/DEVELOPMENT.md', 'docs/PLAYERS.md', 'docs/STATUS.md', 'docs/ROADMAP.md', 'third_party/MinHook-LICENSE.txt',
                  'installer/Setup-ForgeLoader.ps1', 'installer/Instalar-ForgeLoader.cmd', 'installer/Restaurar-Backup.cmd', 'installer/Install-Mod.ps1', 'installer/Instalar-Mod.cmd'):
         files[name] = ROOT / name
@@ -63,9 +64,12 @@ def build(dll=None, devkit_only=False):
             'Setup-ForgeLoader.ps1': ROOT / 'installer/Setup-ForgeLoader.ps1',
             'Install-Mod.ps1': ROOT / 'installer/Install-Mod.ps1',
             'Instalar-Mod.cmd': ROOT / 'installer/Instalar-Mod.cmd',
+            'Reparar-Save.cmd': ROOT / 'installer/Reparar-Save.cmd',
+            'Ferramentas/repair_save_players.py': ROOT / 'tools/repair_save_players.py',
             'payload/player-patch.json': ROOT / 'profiles/player-patch.json',
             'payload/KingdomsPortraits.dll': dll,
             'LEIA-ME-PRIMEIRO.md': ROOT / 'docs/PLAYERS.md',
+            'KR214.md': ROOT / 'docs/KR214.md',
             'STATUS.md': ROOT / 'docs/STATUS.md',
             'LICENSE-MINHOOK.txt': ROOT / 'third_party/MinHook-LICENSE.txt',
             'LICENSE-LUA.txt': ROOT / 'third_party/Lua-LICENSE.txt',
@@ -79,6 +83,11 @@ def build(dll=None, devkit_only=False):
         native=dll.parent/'forge_native.dll'
         if not native.is_file(): raise ValueError('Build the native example before packaging')
         result.append(archive(output/'forge.native_hello-1.0.0.flmod', {'mod.json': ROOT/'modkit/examples/native/forge_native/mod.json', 'dlls/main.dll': native}))
+        performance=dll.parent/'forge_kr214_performance.dll'
+        if not performance.is_file(): raise ValueError('Build the KR214 performance mod before packaging')
+        name='forge.kr214_performance-1.0.0.flmod'
+        result.append(archive(output/name, {'mod.json': ROOT/'mods/forge.kr214_performance/mod.json', 'dlls/main.dll': performance, 'LEIA-ME.md': ROOT/'docs/KR214.md'}))
+        files['mods-exemplo/'+name]=output/name
         files['mods-exemplo/forge.hello-1.0.0.flmod']=output/'forge.hello-1.0.0.flmod'
         files['mods-exemplo/forge.fps_limit-1.0.0.flmod']=output/'forge.fps_limit-1.0.0.flmod'
         result[0]=archive(output / config['player_archive'], files)
@@ -86,7 +95,7 @@ def build(dll=None, devkit_only=False):
     (output / 'SHA256SUMS.txt').write_text(sums, encoding='ascii')
     manifest = {'name': config['name'], 'version': config['version'], 'artifacts': result,
                 'contains_original_game': False, 'general_mod_loader': config['general_mod_loader'],
-                'status': 'alpha; local Lua/native mods; multiplayer handshake pending'}
+                'game_build': config['game_build'], 'status': 'KR214 port; multiplayer save/rejoin and performance gains on GTX 1080 not verified'}
     (output / 'release-manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     print(json.dumps({'output': str(output), **manifest}, indent=2))
     return output

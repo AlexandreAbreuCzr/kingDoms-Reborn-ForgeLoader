@@ -22,7 +22,7 @@ extern "C" {
 namespace forgeloader {
 namespace fs=std::filesystem;
 using json=nlohmann::json;
-constexpr const char* GameHash="a5d2385660d9e819d2aa073cdd9c1d74c05149c9617f37cbb8b31e83708c4e24";
+constexpr const char* GameHash="c676d4ac5533464cc2bbfefd6321c9a119d0f264069ddf265668f22d945d3df4";
 constexpr size_t MemoryLimit=8*1024*1024, ScriptLimit=1024*1024;
 struct Mod {
     std::string id,version,name,status,error;
@@ -107,7 +107,7 @@ static void init_lua(Mod& mod){
     for(const char* name:{"dofile","loadfile","load","print"}){lua_pushnil(mod.state);lua_setglobal(mod.state,name);}
     lua_newtable(mod.state);
     for(auto f:{std::pair<const char*,lua_CFunction>{"log",api_log},{"set_window_title",api_title},{"set_fps_limit",api_set_fps},{"get_fps_limit",api_get_fps},{"on",api_on}}){lua_pushcfunction(mod.state,f.second);lua_setfield(mod.state,-2,f.first);}
-    lua_pushstring(mod.state,"0.2.0-alpha");lua_setfield(mod.state,-2,"version");
+    lua_pushstring(mod.state,"0.2.1-KR214");lua_setfield(mod.state,-2,"version");
     push_json(mod.state,mod.manifest.value("settings",json::object()));lua_setfield(mod.state,-2,"config");lua_setglobal(mod.state,"forge");
     auto source=read_small(mod.entry,ScriptLimit);
     if(luaL_loadbufferx(mod.state,source.data(),source.size(),mod.id.c_str(),"t")!=LUA_OK)throw std::runtime_error(lua_error_text(mod.state));
@@ -115,11 +115,11 @@ static void init_lua(Mod& mod){
     if(result!=LUA_OK)throw std::runtime_error(lua_error_text(mod.state));
 }
 struct Loader::Impl {
-    fs::path mods,report;FLHostV1 host;std::map<std::string,std::unique_ptr<Mod>> entries;
+    fs::path mods,report;FLHostV1 host;NativeLoadHooks hooks;std::map<std::string,std::unique_ptr<Mod>> entries;
     mutable std::mutex mutex;std::string snapshot;size_t count=0;bool loaded=false;
     void fail(Mod& m,const std::string& error){m.failed=true;m.status="error";m.error=error.substr(0,2048);host.log(("["+m.id+"] ERROR: "+m.error).c_str());}
     void save(){
-        json data={{"loader_version","0.2.0-alpha"},{"api_major",1},{"game_sha256",GameHash},{"mods",json::array()}};
+        json data={{"loader_version","0.2.1-KR214"},{"api_major",1},{"game_sha256",GameHash},{"mods",json::array()}};
         std::string text="ForgeLoader 0.2.0\nPasta: Mods/\n\n";size_t active=0;
         for(auto& pair:entries){auto& m=*pair.second;if(m.status=="loaded")++active;
             data["mods"].push_back({{"id",m.id},{"version",m.version},{"status",m.status},{"error",m.error}});
@@ -134,6 +134,7 @@ struct Loader::Impl {
         if(!visiting.insert(id).second){fail(mod,"dependency cycle");return false;}
         for(auto it=mod.manifest["requires"].begin();it!=mod.manifest["requires"].end();++it){
             if(it.key()=="core.shared_portraits"){if(it.value()!="3.0.0"){fail(mod,"unsupported portraits dependency");return false;}continue;}
+            if(it.key()=="core.loader"){if(it.value()!="0.2.1"){fail(mod,"requires ForgeLoader 0.2.1-KR214");return false;}continue;}
             auto dep=entries.find(it.key());if(dep==entries.end()||dep->second->version!=it.value()||!start(it.key(),visiting)){fail(mod,"missing, incompatible or failed dependency: "+it.key());return false;}
         }
         visiting.erase(id);
@@ -144,14 +145,17 @@ struct Loader::Impl {
                 mod.library=LoadLibraryExW(mod.entry.c_str(),nullptr,LOAD_LIBRARY_SEARCH_DLL_LOAD_DIR|LOAD_LIBRARY_SEARCH_SYSTEM32);
                 if(!mod.library)throw std::runtime_error("native DLL could not be loaded");
                 auto entry=reinterpret_cast<FLStartModV1>(GetProcAddress(mod.library,"ForgeMod_Load"));if(!entry)throw std::runtime_error("missing ForgeMod_Load export");
+                struct HookScope {NativeLoadHooks hooks;bool committed=false;~HookScope(){if(hooks.finish)hooks.finish(committed);}} scope{hooks};
+                if(hooks.begin)hooks.begin();
                 mod.native.size=sizeof(FLModV1);mod.native.abi_version=FORGELOADER_ABI_VERSION;
                 if(!entry(&host,&mod.native)||mod.native.size!=sizeof(FLModV1)||mod.native.abi_version!=FORGELOADER_ABI_VERSION||!mod.native.id||!mod.native.version||mod.id!=mod.native.id||mod.version!=mod.native.version)throw std::runtime_error("native ABI, id or version mismatch");
+                scope.committed=true;
             }
             mod.status="loaded";host.log(("["+mod.id+"] LOADED "+mod.version).c_str());return true;
         }catch(const std::exception& e){fail(mod,e.what());return false;}
     }
 };
-Loader::Loader(fs::path mods,fs::path report,FLHostV1 host):impl(std::make_unique<Impl>()) {impl->mods=std::move(mods);impl->report=std::move(report);impl->host=host;}
+Loader::Loader(fs::path mods,fs::path report,FLHostV1 host,NativeLoadHooks hooks):impl(std::make_unique<Impl>()) {impl->mods=std::move(mods);impl->report=std::move(report);impl->host=host;impl->hooks=hooks;}
 Loader::~Loader()=default;
 void Loader::load(){
     if(impl->loaded)return;impl->loaded=true;fs::create_directories(impl->mods);

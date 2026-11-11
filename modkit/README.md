@@ -1,4 +1,4 @@
-# ForgeLoader Dev Kit 0.2
+# ForgeLoader Dev Kit KR214
 
 Crie com `python modkit/krmodkit.py new autor.nome --name "Meu mod" --output MeusMods/autor.nome`, edite `Scripts/main.lua`, valide e empacote:
 

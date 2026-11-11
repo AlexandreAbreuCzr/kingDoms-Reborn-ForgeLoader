@@ -59,7 +59,7 @@ thread_local Context* context=nullptr;
 struct Scope {Context* before;Scope(Context* now):before(context){context=now;}~Scope(){context=before;}};
 std::wstring read(const FString& s){if(!s.data||s.num<1||s.num>int(krphoto::MaxToken+1)||s.max<s.num)return {};return std::wstring(s.data,s.num-1);}
 void assign(FString& dest,const std::wstring& text){
-    int count=int(text.size()+1);if(dest.max<count){dest.data=static_cast<wchar_t*>(api<void*(__fastcall*)(void*,size_t,uint32_t)>(0x2a0d480)(dest.data,size_t(count)*2,0));dest.max=count;}
+    int count=int(text.size()+1);if(dest.max<count){dest.data=static_cast<wchar_t*>(api<void*(__fastcall*)(void*,size_t,uint32_t)>(0x1bdcca0)(dest.data,size_t(count)*2,0));dest.max=count;}
     memcpy(dest.data,text.c_str(),size_t(count)*2);dest.num=count;
 }
 void normalize(Info* info,const krphoto::Photo& photo){
@@ -67,27 +67,27 @@ void normalize(Info* info,const krphoto::Photo& photo){
     if(s.data&&s.max>int(fallback.size())){memcpy(s.data,fallback.c_str(),(fallback.size()+1)*2);s.num=int(fallback.size()+1);}
 }
 bool mainController(void* p){
-    if(!p)return false;void* wanted=api<void*(__fastcall*)()>(0x295c6a0)();
+    if(!p)return false;void* wanted=api<void*(__fastcall*)()>(0x1b31110)();
     void* cls=*reinterpret_cast<void**>(static_cast<uint8_t*>(p)+16);
     for(int i=0;cls&&i<32;++i){if(cls==wanted)return true;cls=*reinterpret_cast<void**>(static_cast<uint8_t*>(cls)+64);}return false;
 }
 void publish(void* widget){
     int action;Bytes image;
     {std::lock_guard<std::mutex> lock(pendingMutex);action=pendingAction;if(!action)return;image=pendingJpeg;}
-    void* controller=api<void*(__fastcall*)(const void*,int)>(0x3f82d20)(widget,0);
+    void* controller=api<void*(__fastcall*)(const void*,int)>(0x31510b0)(widget,0);
     if(!mainController(controller))return;
     int id=*reinterpret_cast<int*>(static_cast<uint8_t*>(controller)+0x5b0);if(id<0||id>63)return;
     {std::lock_guard<std::mutex> lock(pendingMutex);if(pendingAction!=action)return;pendingAction=0;pendingJpeg.clear();}
     // Native leader settings own this preview. Updating only GameInstance left
     // the old preview on screen and Finalizado would send the old portrait back.
-    Info* info=reinterpret_cast<Info*>(static_cast<uint8_t*>(widget)+0x4a0);
+    Info* info=reinterpret_cast<Info*>(static_cast<uint8_t*>(widget)+0x490);
     try{
         std::wstring current=read(info->portrait());auto old=krphoto::decode(current);
         std::wstring fallback=old.marked?old.fallback:current;if(!krphoto::valid_name(fallback))throw std::runtime_error("missing fallback");
         std::wstring token=action==2?fallback:krphoto::encode(fallback,image);
         assign(info->portrait(),token);
-        api<void(__fastcall*)(void*)>(0x28c9f00)(widget);
-        api<void(__fastcall*)(void*,const Info*)>(0x295ffc0)(controller,info);
+        api<void(__fastcall*)(void*)>(0x190a8e0)(widget);
+        api<void(__fastcall*)(void*,const Info*)>(0x1b33c30)(controller,info);
         log(action==2?"Portrait restore requested through game RPC":"Photo submitted through game RPC");
     }catch(...){log("Photo submission refused: invalid local portrait or allocation failure");}
 }
@@ -101,17 +101,17 @@ void* texture(const krphoto::Photo& photo){
     if(!photo.valid)return nullptr;
     struct Entry {Weak weak;ULONGLONG accessed;};static std::map<std::string,Entry> cache;
     std::string key=krphoto::base64(photo.jpeg);auto it=cache.find(key);
-    if(it!=cache.end()){it->second.accessed=GetTickCount64();if(auto* obj=api<void*(__fastcall*)(const Weak*)>(0x2cc1c90)(&it->second.weak))return obj;}
+    if(it!=cache.end()){it->second.accessed=GetTickCount64();if(auto* obj=api<void*(__fastcall*)(const Weak*)>(0x1e91700)(&it->second.weak))return obj;}
     if(!dimensions(photo.jpeg))return nullptr;
     ByteArray buffer{photo.jpeg.data(),int(photo.jpeg.size()),int(photo.jpeg.size())};
-    void* result=api<void*(__fastcall*)(const ByteArray*)>(0x3ff17e0)(&buffer);if(!result)return nullptr;
+    void* result=api<void*(__fastcall*)(const ByteArray*)>(0x31f0720)(&buffer);if(!result)return nullptr;
     if(cache.size()>=64){auto oldest=std::min_element(cache.begin(),cache.end(),[](auto& a,auto& b){return a.second.accessed<b.second.accessed;});cache.erase(oldest);}
-    Entry entry{};api<void(__fastcall*)(Weak*,const void*)>(0x2cbf950)(&entry.weak,result);entry.accessed=GetTickCount64();cache[key]=entry;
+    Entry entry{};api<void(__fastcall*)(Weak*,const void*)>(0x1e8f3c0)(&entry.weak,result);entry.accessed=GetTickCount64();cache[key]=entry;
     log("Photo texture decoded for a player");return result;
 }
 void __fastcall hookedSet(void* material,uint64_t name,void* value){
     if(context&&context->photo.valid){
-        static uint64_t character=0;if(!character)api<void*(__fastcall*)(uint64_t*,const char*,int)>(0x2adf640)(&character,"Character",1);
+        static uint64_t character=0;if(!character)api<void*(__fastcall*)(uint64_t*,const char*,int)>(0x1caf090)(&character,"Character",1);
         if(name==character){if(auto* custom=texture(context->photo))value=custom;}
     }
     originalSet(material,name,value);
@@ -193,7 +193,7 @@ bool matchingExecutable(){
     auto* dos=reinterpret_cast<IMAGE_DOS_HEADER*>(base);
     if(dos->e_magic!=IMAGE_DOS_SIGNATURE)return false;
     auto* nt=reinterpret_cast<IMAGE_NT_HEADERS64*>(base+dos->e_lfanew);
-    if(nt->Signature!=IMAGE_NT_SIGNATURE||nt->FileHeader.TimeDateStamp!=0x698c804c||nt->OptionalHeader.SizeOfImage!=0x16cc7000)return false;
+    if(nt->Signature!=IMAGE_NT_SIGNATURE||nt->FileHeader.TimeDateStamp!=0x65fd60d5||nt->OptionalHeader.SizeOfImage!=0x15cf6000)return false;
     wchar_t path[32768];if(!GetModuleFileNameW(nullptr,path,32768))return false;
     HANDLE file=CreateFileW(path,GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,nullptr,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,nullptr);
     if(file==INVALID_HANDLE_VALUE)return false;
@@ -202,7 +202,7 @@ bool matchingExecutable(){
         uint8_t block[65536];DWORD count=0;bool ok=true;
         for(;;){if(!ReadFile(file,block,sizeof(block),&count,nullptr)){ok=false;break;}if(!count)break;if(!CryptHashData(hash,block,count,0)){ok=false;break;}}
         uint8_t digest[32];DWORD size=32;if(ok&&CryptGetHashParam(hash,HP_HASHVAL,digest,&size,0)){
-            static const uint8_t expected[32]={0xa5,0xd2,0x38,0x56,0x60,0xd9,0xe8,0x19,0xd2,0xaa,0x07,0x3c,0xdd,0x9c,0x1d,0x74,0xc0,0x51,0x49,0xc9,0x61,0x7f,0x37,0xcb,0xb8,0xb3,0x1e,0x83,0x70,0x8c,0x4e,0x24};
+            static const uint8_t expected[32]={0xc6,0x76,0xd4,0xac,0x55,0x33,0x46,0x4c,0xc2,0xbb,0xfe,0xfd,0x63,0x21,0xc9,0xa1,0x19,0xd0,0xf2,0x64,0x06,0x9d,0xdf,0x26,0x56,0x68,0xf2,0x2d,0x94,0x5d,0x3d,0xf4};
             valid=size==32&&memcmp(digest,expected,32)==0;
         }
     }
@@ -215,13 +215,13 @@ DWORD WINAPI run(void*){
     if(!prepareMods())return 1;
     Gdiplus::GdiplusStartupInput input;ULONG_PTR gdip=0;if(Gdiplus::GdiplusStartup(&gdip,&input,nullptr)!=Gdiplus::Ok)return 1;
     if(MH_Initialize()!=MH_OK)return 1;
-    if(MH_CreateHook(reinterpret_cast<void*>(base+0x27b11a0),reinterpret_cast<void*>(hookedUI),reinterpret_cast<void**>(&originalUI))!=MH_OK||
-       MH_CreateHook(reinterpret_cast<void*>(base+0x28c8200),reinterpret_cast<void*>(hookedLobby),reinterpret_cast<void**>(&originalLobby))!=MH_OK||
-       MH_CreateHook(reinterpret_cast<void*>(base+0x288f2c0),reinterpret_cast<void*>(hookedGet),reinterpret_cast<void**>(&originalGet))!=MH_OK||
-       MH_CreateHook(reinterpret_cast<void*>(base+0x28bd8f0),reinterpret_cast<void*>(hookedTick),reinterpret_cast<void**>(&originalTick))!=MH_OK||
-       MH_CreateHook(reinterpret_cast<void*>(base+0x408c7d0),reinterpret_cast<void*>(hookedSet),reinterpret_cast<void**>(&originalSet))!=MH_OK||
-       MH_CreateHook(reinterpret_cast<void*>(base+0x1ff9520),reinterpret_cast<void*>(hookedEngineTick),reinterpret_cast<void**>(&originalEngineTick))!=MH_OK||MH_EnableHook(MH_ALL_HOOKS)!=MH_OK){MH_DisableHook(MH_ALL_HOOKS);MH_Uninitialize();log("Hook installation failed; hooks removed");return 1;}
-    log("Portrait runtime v3 initialized; original D3D policy; leader settings panel");
+    if(MH_CreateHook(reinterpret_cast<void*>(base+0x1908600),reinterpret_cast<void*>(hookedUI),reinterpret_cast<void**>(&originalUI))!=MH_OK||
+       MH_CreateHook(reinterpret_cast<void*>(base+0x1908c10),reinterpret_cast<void*>(hookedLobby),reinterpret_cast<void**>(&originalLobby))!=MH_OK||
+       MH_CreateHook(reinterpret_cast<void*>(base+0x18fe0e0),reinterpret_cast<void*>(hookedGet),reinterpret_cast<void**>(&originalGet))!=MH_OK||
+       MH_CreateHook(reinterpret_cast<void*>(base+0x1906d20),reinterpret_cast<void*>(hookedTick),reinterpret_cast<void**>(&originalTick))!=MH_OK||
+       MH_CreateHook(reinterpret_cast<void*>(base+0x325ab60),reinterpret_cast<void*>(hookedSet),reinterpret_cast<void**>(&originalSet))!=MH_OK||
+       MH_CreateHook(reinterpret_cast<void*>(base+0x11e9b50),reinterpret_cast<void*>(hookedEngineTick),reinterpret_cast<void**>(&originalEngineTick))!=MH_OK||MH_EnableHook(MH_ALL_HOOKS)!=MH_OK){MH_DisableHook(MH_ALL_HOOKS);MH_Uninitialize();log("Hook installation failed; hooks removed");return 1;}
+    log("ForgeLoader KR214 initialized; original D3D policy");
     while(!gameWindow){EnumWindows(findWindow,0);Sleep(250);}
     createModsPanel();
     HINSTANCE instance=GetModuleHandleW(L"KingdomsPortraits.dll");WNDCLASSW cls{};cls.lpfnWndProc=panelProc;cls.hInstance=instance;cls.lpszClassName=L"KRPortraitPanel1";cls.hbrBackground=reinterpret_cast<HBRUSH>(COLOR_BTNFACE+1);RegisterClassW(&cls);
@@ -236,4 +236,7 @@ DWORD WINAPI run(void*){
 }
 }
 extern "C" __declspec(dllexport) void KingdomsPortraitsMarker(){}
+extern "C" __declspec(dllexport) uintptr_t ForgeLoader_GameBase(){return modsReady.load()?base:0;}
+extern "C" __declspec(dllexport) int ForgeLoader_Hook(uintptr_t rva,void* detour,void** original){return nativeHook(rva,detour,original);}
+extern "C" __declspec(dllexport) int ForgeLoader_ClampVideo214(unsigned option,int cap,float* before,float* after){return clampVideo214(option,cap,before,after);}
 BOOL APIENTRY DllMain(HMODULE module,DWORD reason,LPVOID){if(reason==DLL_PROCESS_ATTACH){DisableThreadLibraryCalls(module);HANDLE thread=CreateThread(nullptr,0,run,nullptr,0,nullptr);if(thread)CloseHandle(thread);}return TRUE;}

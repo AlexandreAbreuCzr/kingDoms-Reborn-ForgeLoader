@@ -9,10 +9,10 @@ import json
 from pathlib import Path, PurePosixPath
 import re
 
-VERSION = '0.2.0-alpha'
+VERSION = '0.2.1-KR214'
 API_MAJOR = 1
-GAME_SHA = 'a5d2385660d9e819d2aa073cdd9c1d74c05149c9617f37cbb8b31e83708c4e24'
-PORTRAITS_SHA = '51ca84fbfd4918547a7a974a14095906548e5e7d1e170dcace2dfe26802de547'
+GAME_SHA = 'c676d4ac5533464cc2bbfefd6321c9a119d0f264069ddf265668f22d945d3df4'
+PORTRAITS_SHA = '2fe5903e5da5021c0643df744552480f1e1f392828737e94ceaf3b8879988e98'
 ID = re.compile(r'^[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+$')
 SEMVER = re.compile(r'^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$')
 HASH = re.compile(r'^[0-9a-f]{64}$')
@@ -126,7 +126,7 @@ def discover(folder):
 
 
 def load_order(mods):
-    versions = {'core.shared_portraits': '3.0.0', **{key: m['version'] for key, m in mods.items()}}
+    versions = {'core.shared_portraits': '3.0.0', 'core.loader': '0.2.1', **{key: m['version'] for key, m in mods.items()}}
     for ident, mod in mods.items():
         for dep, version in mod.get('requires', {}).items():
             if versions.get(dep) != version:
@@ -172,7 +172,7 @@ def make_profile(exe, mods_folder):
         row = {key: mod[key] for key in ('id', 'version', 'package_sha256')}
         (shared if mod['multiplayer'] == 'required' else local).append(row)
     return {'schema': 1, 'tool_version': VERSION, 'api_major': API_MAJOR,
-            'adapter': 'kr-0.253-win64-forgeloader-0.2', 'game_sha256': GAME_SHA,
+            'adapter': 'kr-0.214-win64-forgeloader-0.2', 'game_sha256': GAME_SHA,
             'shared_mods': sorted(shared, key=lambda x: x['id']), 'local_mods': local,
             'load_order': ordered, 'mode': 'offline-profile', 'runtime_handshake_implemented': False}
 
