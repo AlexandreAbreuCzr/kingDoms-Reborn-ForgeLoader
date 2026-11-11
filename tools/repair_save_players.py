@@ -179,6 +179,7 @@ def plan(damaged, donor):
 
 
 def fingerprint(folder):
+    folder = folder.resolve()
     files = {}
     for path in sorted(folder.rglob('*')):
         stat = path.lstat()
