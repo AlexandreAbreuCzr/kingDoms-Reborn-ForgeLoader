@@ -16,6 +16,7 @@
 #include <filesystem>
 #include <chrono>
 #include <cmath>
+#include <cstddef>
 #include <shellapi.h>
 #include "../loader/loader.hpp"
 #include "MinHook.h"
@@ -34,6 +35,10 @@ struct Info {alignas(8) uint8_t bytes[96];FString& portrait(){return *reinterpre
 struct Weak {int index=-1,serial=0;};
 struct ByteArray {const uint8_t* data;int num,max;};
 static_assert(sizeof(FString)==16 && sizeof(Info)==96 && sizeof(Weak)==8);
+static_assert(sizeof(ByteArray)==16 && offsetof(ByteArray,num)==8 && offsetof(ByteArray,max)==12);
+// KR214 FImageUtils::ImportBufferAsTexture2D(const TArray<uint8>&).
+// The Kismet wrapper at 0x31f0720 instead takes a world context before the array.
+constexpr uintptr_t ImportPortraitBufferRva = 0x31bfb70;
 uintptr_t base=0;std::atomic<HWND> gameWindow{nullptr};std::atomic<ULONGLONG> lastLobby{0};
 void modsLobbyTick();
 std::atomic<bool> settingsOpen{false};bool choosingFile=false;
@@ -104,7 +109,7 @@ void* texture(const krphoto::Photo& photo){
     if(it!=cache.end()){it->second.accessed=GetTickCount64();if(auto* obj=api<void*(__fastcall*)(const Weak*)>(0x1e91700)(&it->second.weak))return obj;}
     if(!dimensions(photo.jpeg))return nullptr;
     ByteArray buffer{photo.jpeg.data(),int(photo.jpeg.size()),int(photo.jpeg.size())};
-    void* result=api<void*(__fastcall*)(const ByteArray*)>(0x31f0720)(&buffer);if(!result)return nullptr;
+    void* result=api<void*(__fastcall*)(const ByteArray*)>(ImportPortraitBufferRva)(&buffer);if(!result)return nullptr;
     if(cache.size()>=64){auto oldest=std::min_element(cache.begin(),cache.end(),[](auto& a,auto& b){return a.second.accessed<b.second.accessed;});cache.erase(oldest);}
     Entry entry{};api<void(__fastcall*)(Weak*,const void*)>(0x1e8f3c0)(&entry.weak,result);entry.accessed=GetTickCount64();cache[key]=entry;
     log("Photo texture decoded for a player");return result;

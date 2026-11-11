@@ -1,5 +1,9 @@
 # Histórico
 
+## 0.2.2-KR214
+
+- Corrige o crash ao carregar fotos personalizadas no lobby. O hook usa a função de imagem com a assinatura conferida no executável 0.214.
+
 ## 0.2.1-KR214 — 2026-11-10
 
 - Port 0.214, seletor de mods corrigido e suporte ao módulo de rejoin fornecido.

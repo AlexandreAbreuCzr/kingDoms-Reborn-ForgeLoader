@@ -48,6 +48,6 @@ python scripts/build_releases.py --devkit-only
 python scripts/build_releases.py --runtime-dll .local/portrait-build/KingdomsPortraits.dll
 ```
 
-Downloads separados, exemplos `.flmod`, hashes e manifesto ficam em `dist/releases/v0.2.1-KR214`. O pacote para jogadores distribui a DLL própria e um patch de cabeçalhos PE aplicado à cópia original do usuário; não inclui o jogo.
+Downloads separados, exemplos `.flmod`, hashes e manifesto ficam em `dist/releases/v0.2.2-KR214`. O pacote para jogadores distribui a DLL própria e um patch de cabeçalhos PE aplicado à cópia original do usuário; não inclui o jogo.
 
 `tools/rea` mantém REA e seus cinco submódulos fixados. `scripts/initialize_rea.ps1` trata fixtures incompatíveis com NTFS. Não há projeto Unreal original neste repositório. [Estado](STATUS.md) e [API](MOD-API.md).

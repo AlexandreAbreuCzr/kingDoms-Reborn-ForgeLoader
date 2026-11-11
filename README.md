@@ -1,10 +1,10 @@
 # ForgeLoader para Kingdoms Reborn 0.214
 
-Este ramo mantém o port **0.2.1-KR214** para o build antigo. O pacote [0.2.0-alpha para 0.253](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/tag/v0.2.0-alpha) é separado.
+Este ramo mantém o port **0.2.2-KR214** para o build antigo. O pacote [0.2.0-alpha para 0.253](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/tag/v0.2.0-alpha) é separado.
 
-- [Instalador para jogadores KR214](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.1-KR214/ForgeLoader-Players-0.2.1-KR214.zip)
-- [Perfil leve GTX 1080 (.flmod)](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.1-KR214/forge.kr214_performance-1.0.0.flmod)
-- [Dev Kit KR214](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.1-KR214/ForgeLoader-DevKit-0.2.1-KR214.zip)
+- [Instalador para jogadores KR214](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.2-KR214/ForgeLoader-Players-0.2.2-KR214.zip)
+- [Perfil leve GTX 1080 (.flmod)](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.2-KR214/forge.kr214_performance-1.0.0.flmod)
+- [Dev Kit KR214](https://github.com/AlexandreAbreuCzr/kingDoms-Reborn-ForgeLoader/releases/download/v0.2.2-KR214/ForgeLoader-DevKit-0.2.2-KR214.zip)
 
 Extraia o instalador, feche o jogo e abra `Instalar-ForgeLoader.cmd`. Selecione a pasta do **0.214**. Depois use **Instalar mod**, na janela do jogo, ou `ForgeLoader/Instalar-Mod.cmd`. Selecione o `.flmod`, reinicie e confira **Meus mods**.
 

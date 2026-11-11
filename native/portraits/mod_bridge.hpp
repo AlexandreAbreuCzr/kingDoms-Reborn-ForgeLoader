@@ -74,7 +74,7 @@ void __fastcall hookedEngineTick(void* self){
     if(!modsReady.load()||!gameWindow)return;
     static bool stopped=false;if(stopped)return;
     try{
-        if(!modsStarted.load()){modsThread=GetCurrentThreadId();mods->load();modsStarted.store(true);modLog("ForgeLoader 0.2.1-KR214: mods initialized on game thread");}
+        if(!modsStarted.load()){modsThread=GetCurrentThreadId();mods->load();modsStarted.store(true);modLog("ForgeLoader 0.2.2-KR214: mods initialized on game thread");}
         static auto previous=std::chrono::steady_clock::now();auto now=std::chrono::steady_clock::now();double dt=std::min(1.0,std::chrono::duration<double>(now-previous).count());previous=now;mods->tick(dt);
     }catch(const std::exception& e){modLog(e.what());stopped=true;}
 }

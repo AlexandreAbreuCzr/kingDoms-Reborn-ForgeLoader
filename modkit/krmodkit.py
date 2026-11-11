@@ -9,10 +9,10 @@ import json
 from pathlib import Path, PurePosixPath
 import re
 
-VERSION = '0.2.1-KR214'
+VERSION = '0.2.2-KR214'
 API_MAJOR = 1
 GAME_SHA = 'c676d4ac5533464cc2bbfefd6321c9a119d0f264069ddf265668f22d945d3df4'
-PORTRAITS_SHA = '2fe5903e5da5021c0643df744552480f1e1f392828737e94ceaf3b8879988e98'
+PORTRAITS_SHA = 'f7355061afdcabc8c1df5c091febc26ba0d596b51467d15f0a250aa59991bf62'
 ID = re.compile(r'^[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+$')
 SEMVER = re.compile(r'^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$')
 HASH = re.compile(r'^[0-9a-f]{64}$')

@@ -1,4 +1,6 @@
-# ForgeLoader 0.2.1-KR214
+# ForgeLoader 0.2.2-KR214
+
+Corrige o crash ao carregar um retrato personalizado durante a sincronização do lobby. Em uma cópia do jogo, o hook criou e reutilizou uma textura de foto válida e manteve o retrato padrão com uma imagem inválida. A sincronização entre dois PCs ainda precisa de teste.
 
 Atualização para **Kingdoms Reborn 0.214**. Inclui o seletor de `.flmod` vinculado à janela do jogo, instalação verificada na pasta `Mods/`, perfil leve GTX 1080 opcional e reparador de saves com seleção explícita do doador. Atualiza os runtimes KR214 conhecidos com backup; o pacote para 0.253 é separado.
 

@@ -107,7 +107,7 @@ static void init_lua(Mod& mod){
     for(const char* name:{"dofile","loadfile","load","print"}){lua_pushnil(mod.state);lua_setglobal(mod.state,name);}
     lua_newtable(mod.state);
     for(auto f:{std::pair<const char*,lua_CFunction>{"log",api_log},{"set_window_title",api_title},{"set_fps_limit",api_set_fps},{"get_fps_limit",api_get_fps},{"on",api_on}}){lua_pushcfunction(mod.state,f.second);lua_setfield(mod.state,-2,f.first);}
-    lua_pushstring(mod.state,"0.2.1-KR214");lua_setfield(mod.state,-2,"version");
+    lua_pushstring(mod.state,"0.2.2-KR214");lua_setfield(mod.state,-2,"version");
     push_json(mod.state,mod.manifest.value("settings",json::object()));lua_setfield(mod.state,-2,"config");lua_setglobal(mod.state,"forge");
     auto source=read_small(mod.entry,ScriptLimit);
     if(luaL_loadbufferx(mod.state,source.data(),source.size(),mod.id.c_str(),"t")!=LUA_OK)throw std::runtime_error(lua_error_text(mod.state));
@@ -119,7 +119,7 @@ struct Loader::Impl {
     mutable std::mutex mutex;std::string snapshot;size_t count=0;bool loaded=false;
     void fail(Mod& m,const std::string& error){m.failed=true;m.status="error";m.error=error.substr(0,2048);host.log(("["+m.id+"] ERROR: "+m.error).c_str());}
     void save(){
-        json data={{"loader_version","0.2.1-KR214"},{"api_major",1},{"game_sha256",GameHash},{"mods",json::array()}};
+        json data={{"loader_version","0.2.2-KR214"},{"api_major",1},{"game_sha256",GameHash},{"mods",json::array()}};
         std::string text="ForgeLoader 0.2.0\nPasta: Mods/\n\n";size_t active=0;
         for(auto& pair:entries){auto& m=*pair.second;if(m.status=="loaded")++active;
             data["mods"].push_back({{"id",m.id},{"version",m.version},{"status",m.status},{"error",m.error}});
@@ -134,7 +134,7 @@ struct Loader::Impl {
         if(!visiting.insert(id).second){fail(mod,"dependency cycle");return false;}
         for(auto it=mod.manifest["requires"].begin();it!=mod.manifest["requires"].end();++it){
             if(it.key()=="core.shared_portraits"){if(it.value()!="3.0.0"){fail(mod,"unsupported portraits dependency");return false;}continue;}
-            if(it.key()=="core.loader"){if(it.value()!="0.2.1"){fail(mod,"requires ForgeLoader 0.2.1-KR214");return false;}continue;}
+            if(it.key()=="core.loader"){if(it.value()!="0.2.1"){fail(mod,"requires ForgeLoader 0.2.2-KR214");return false;}continue;}
             auto dep=entries.find(it.key());if(dep==entries.end()||dep->second->version!=it.value()||!start(it.key(),visiting)){fail(mod,"missing, incompatible or failed dependency: "+it.key());return false;}
         }
         visiting.erase(id);

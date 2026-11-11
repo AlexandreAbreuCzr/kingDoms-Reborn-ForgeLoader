@@ -9,7 +9,7 @@ function Get-InstallHash([string]$Path) {
 function Install-ForgeMod([string]$Root,[string]$Archive) {
     $rootPath=[IO.Path]::GetFullPath($Root)
     $record=Join-Path $rootPath 'ForgeLoader\player-patch.json'
-    if(!(Test-Path -LiteralPath $record -PathType Leaf)){throw 'Atualize esta pasta do jogo com o instalador ForgeLoader 0.2.1-KR214 antes de instalar mods.'}
+    if(!(Test-Path -LiteralPath $record -PathType Leaf)){throw 'Atualize esta pasta do jogo com o instalador ForgeLoader 0.2.2-KR214 antes de instalar mods.'}
     $installed=Get-Content -LiteralPath $record -Raw|ConvertFrom-Json
     $bin=Join-Path $rootPath 'PunCity\Binaries\Win64'
     $dll=Join-Path $bin 'KingdomsPortraits.dll';$exe=Join-Path $bin 'PrototypeCity-Win64-Shipping.exe'
